@@ -1,3 +1,4 @@
+import torch
 #Default is set to same as procgen
 total_steps = 8e6
 num_envs = 32
@@ -11,9 +12,10 @@ value_coef = .5
 entropy_coef = .01
 gamma = 0.999
 lmbda = 0.95
+optimizer=torch.optim.Adam
 lr= 5e-4
-opt_extra = 1e-5,
-version = 'Baseline(Procgen)'
+opt_extra = 1e-5
+version = 'Default'
 in_channels = 3
 feature_dim = 512
 time_limit_hours = 12

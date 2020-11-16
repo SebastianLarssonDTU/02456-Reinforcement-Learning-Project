@@ -40,7 +40,7 @@ class PPO():
         self.encoder = Encoder(in_channels = h.in_channels, feature_dim = h.feature_dim)
         self.policy = Policy(encoder = self.encoder, feature_dim = h.feature_dim, num_actions = 15)
         self.policy.cuda()
-        self.optimizer = h.optimizer(self.policy.parameters, self.lr, h.opt_extra)
+        self.optimizer = h.optimizer(self.policy.parameters(), lr=self.lr, eps=h.opt_extra)
         self.env = make_env(self.num_envs, num_levels=self.num_levels)
 
         #print
