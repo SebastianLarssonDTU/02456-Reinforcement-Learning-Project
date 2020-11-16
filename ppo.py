@@ -2,7 +2,8 @@ import torch
 from my_project.utils import make_env, Storage, orthogonal_init
 from my_project.model import Encoder
 from my_project.policy import Policy
-from my_project.datatools import DATA_PATH, MODEL_PATH, create_data_file, add_to_data_file, ClippedPPOLoss, ValueFunctionLoss
+from my_project.datatools import DATA_PATH, MODEL_PATH, create_data_file, add_to_data_file
+from my_project.my_util import ClippedPPOLoss, ValueFunctionLoss
 import my_project.hyperparameters as h
 from datetime import datetime
 from pytz import timezone 
