@@ -3,6 +3,7 @@ from my_project.utils import make_env, Storage, orthogonal_init
 from my_project.model import Encoder
 from my_project.policy import Policy
 from my_project.datatools import DATA_PATH, MODEL_PATH, create_data_file, add_to_data_file, ClippedPPOLoss, ValueFunctionLoss
+import my_project.hyperparameters as h
 from datetime import datetime
 from pytz import timezone 
 
@@ -10,52 +11,36 @@ from pytz import timezone
 class PPO():
     def __init__(self,
                 print_output=False, 
-                file_name=None,
-                total_steps = 8e6,
-                num_envs = 32,
-                num_levels = 10,
-                num_steps = 256,
-                num_epochs = 3,
-                batch_size = 512,
-                eps = .2,
-                grad_eps = .5,
-                value_coef = .5,
-                entropy_coef = .01,
-                lr=5e-4,
-                opt_extra = 1e-5,
-                gamma=0.99,
-                lmbda = 0.95, 
-                version = '',
-                optimizer = torch.optim.Adam,
-                in_channels = 3,
-                feature_dim = 512):
+                file_name=None):
         
-        #Save parameters
+        
         self.print_output= print_output
-        self.total_steps = total_steps
-        self.num_envs = num_envs
-        self.num_levels = num_levels
-        self.num_steps = num_steps
-        self.num_epochs = num_epochs
-        self.batch_size = batch_size
-        self.eps = eps
-        self.grad_eps = grad_eps
-        self.value_coef = value_coef
-        self.entropy_coef = entropy_coef
-        self.lr = lr
-        self.gamma = gamma
-        self.lmbda = lmbda
-        self.version = version
+
+        #Save parameters from hyperparameters module
+        self.total_steps = h.total_steps
+        self.num_envs = h.num_envs
+        self.num_levels = h.num_levels
+        self.num_steps = h.num_steps
+        self.num_epochs = h.num_epochs
+        self.batch_size = h.batch_size
+        self.eps = h.eps
+        self.grad_eps = h.grad_eps
+        self.value_coef = h.value_coef
+        self.entropy_coef = h.entropy_coef
+        self.lr = h.lr
+        self.gamma = h.gamma
+        self.lmbda = h.lmbda
+        self.version = h.version
 
         #Create file_name
         self.file_name=self.create_file_name(file_name)
         
         #Create Model
-        self.encoder = Encoder(in_channels = in_channels, feature_dim = feature_dim)
-        self.policy = Policy(encoder = self.encoder, feature_dim = feature_dim, num_actions = 15)
+        self.encoder = Encoder(in_channels = h.in_channels, feature_dim = h.feature_dim)
+        self.policy = Policy(encoder = self.encoder, feature_dim = h.feature_dim, num_actions = 15)
         self.policy.cuda()
-        self.optimizer = optimizer(self.policy.parameters, lr, opt_extra)
-        self.env = make_env(num_envs, num_levels=num_levels)
+        self.optimizer = h.optimizer(self.policy.parameters, self.lr, h.opt_extra)
+        self.env = make_env(self.num_envs, num_levels=self.num_levels)
 
         #print
         if print_output:
@@ -90,6 +75,8 @@ class PPO():
         add_to_data_file("Step, Mean reward\n", self.file_name+'csv')
         create_data_file(self.file_name + 'txt')
         add_to_data_file("Parameter name, Value\n", self.file_name+'txt')
+
+        #TODO run through hyperparameters and log them
 
     def train(self):
         """
