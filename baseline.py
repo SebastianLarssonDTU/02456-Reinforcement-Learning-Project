@@ -1,3 +1,4 @@
+import hyperparameters as h
 #Wrapper function for implemented baselines
 def set_hyperparameters(baseline='Procgen'):
   implemented_baselines = {}
@@ -11,37 +12,35 @@ def set_hyperparameters(baseline='Procgen'):
 
 #Hyperparameters inspired by Procgen Paper (With 32 instead of 64 environments because of memory)
 def set_hyperparameters_to_baseline_Procgen():
-  global total_steps, num_envs, num_levels, num_steps, num_epochs, batch_size, eps, grad_eps, value_coef, entropy_coef, gamma, lmbda, lr , version
-  total_steps = 8e6
-  num_envs = 32
-  num_levels = 10
-  num_steps = 256
-  num_epochs = 3
-  batch_size = 512
-  eps = .2
-  grad_eps = .5
-  value_coef = .5
-  entropy_coef = .01
-  gamma = 0.999
-  lmbda = 0.95
-  lr= 5e-4
-  version = 'Baseline(Procgen)'
+  h.total_steps = 8e6
+  h.num_envs = 32
+  h.num_levels = 10
+  h.num_steps = 256
+  h.num_epochs = 3
+  h.batch_size = 512
+  h.eps = .2
+  h.grad_eps = .5
+  h.value_coef = .5
+  h.entropy_coef = .01
+  h.gamma = 0.999
+  h.lmbda = 0.95
+  h.lr= 5e-4
+  h.version = 'Baseline(Procgen)'
 
   
 #Hyperparameters inspired by PPO Paper ( without variable learning rate )
 def set_hyperparameters_to_baseline_PPO():
-  global total_steps, num_envs, num_levels, num_steps, num_epochs, batch_size, eps, grad_eps, value_coef, entropy_coef, gamma, lmbda, lr, version
-  total_steps = 8e6
-  num_envs = 32
-  num_levels = 10
-  num_steps = 128
-  num_epochs = 3
-  batch_size = 256
-  eps = .1
-  grad_eps = .5
-  value_coef = 1
-  entropy_coef = .01
-  gamma = 0.99
-  lmbda = 0.95
-  lr = 2.5e-4
-  version = 'Baseline(PPO)'
+  h.total_steps = 8e6
+  h.num_envs = 32
+  h.num_levels = 10
+  h.num_steps = 128
+  h.num_epochs = 3
+  h.batch_size = 256
+  h.eps = .1
+  h.grad_eps = .5
+  h.value_coef = 1
+  h.entropy_coef = .01
+  h.gamma = 0.99
+  h.lmbda = 0.95
+  h.lr = 2.5e-4
+  h.version = 'Baseline(PPO)'
