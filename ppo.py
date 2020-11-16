@@ -1,8 +1,8 @@
 import torch
-from utils import make_env, Storage, orthogonal_init
-from model import Encoder
-from policy import Policy
-from datatools import DATA_PATH, MODEL_PATH, create_data_file, add_to_data_file, ClippedPPOLoss, ValueFunctionLoss
+from my_project.utils import make_env, Storage, orthogonal_init
+from my_project.model import Encoder
+from my_project.policy import Policy
+from my_project.datatools import DATA_PATH, MODEL_PATH, create_data_file, add_to_data_file, ClippedPPOLoss, ValueFunctionLoss
 from datetime import datetime
 from pytz import timezone 
 
@@ -113,7 +113,7 @@ class PPO():
 
         if self.print_output:
             print('Completed training!')
-        torch.save(policy.state_dict(), MODEL_PATH + self.file_name+'.pt')
+        torch.save(self.policy.state_dict(), MODEL_PATH + self.file_name+'.pt')
 
 
     def run_policy(self, obs):
@@ -143,7 +143,7 @@ class PPO():
     def optimize_policy(self):
         # Optimize policy
         self.policy.train()
-        for epoch in range(self.num_epochs):
+        for _ in range(self.num_epochs):
 
             # Iterate over batches of transitions
             generator = self.storage.get_generator(self.batch_size)

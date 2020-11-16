@@ -1,4 +1,4 @@
-import hyperparameters as h
+import my_project.hyperparameters as h
 #Wrapper function for implemented baselines
 def set_hyperparameters(baseline='Procgen'):
   implemented_baselines = {}
