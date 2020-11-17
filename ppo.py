@@ -121,11 +121,11 @@ class PPO():
 
     def end_training(self, last_step):
       #Add to log file
-      add_to_data_file('Time spent (in seconds), {:.2f}\n'.format(time.time()-start_time) + \
+      add_to_data_file('Time spent (in seconds), {:.2f}\n'.format(time.time()-self.start_time) + \
                         "Steps taken, {}\n".format(last_step) + \
                         "Done, False\n", 
                         self.file_name + 'txt')
-      torch.save(self.policy.state_dict(), MODEL_PATH + file_name+'.pt')
+      torch.save(self.policy.state_dict(), MODEL_PATH + self.file_name+'.pt')
     
     def is_time_spent(self):
         time_spent = time.time()-self.start_time
