@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from my_project.utils import orthogonal_init
+from utils import orthogonal_init
 
 class Flatten(nn.Module):
     def forward(self, x):

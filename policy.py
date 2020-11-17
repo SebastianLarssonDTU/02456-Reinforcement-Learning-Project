@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from my_project.utils import orthogonal_init
+from utils import orthogonal_init
 
 class Policy(nn.Module):
   def __init__(self, encoder, feature_dim, num_actions):
