@@ -76,14 +76,14 @@ class PPO():
 
     def init_log_files(self):
         create_data_file(self.file_name + '.csv')
-        add_to_data_file("Step, Mean reward\n", self.file_name+'csv')
-        create_data_file(self.file_name + 'txt')
-        add_to_data_file("Parameter name, Value\n", self.file_name+'txt')
+        add_to_data_file("Step, Mean reward\n", self.file_name+'.csv')
+        create_data_file(self.file_name + '.txt')
+        add_to_data_file("Parameter name, Value\n", self.file_name+'.txt')
 
         hyperpar_string = ""
         for key, val in vars(self).items():
             hyperpar_string += "{}, {}\n".format(key, val)
-        add_to_data_file(hyperpar_string, self.file_name + 'txt')
+        add_to_data_file(hyperpar_string, self.file_name + '.txt')
         #TODO run through hyperparameters and log them
 
     def train(self):
@@ -124,7 +124,7 @@ class PPO():
       add_to_data_file('Time spent (in seconds), {:.2f}\n'.format(time.time()-self.start_time) + \
                         "Steps taken, {}\n".format(last_step) + \
                         "Done, False\n", 
-                        self.file_name + 'txt')
+                        self.file_name + '.txt')
       torch.save(self.policy.state_dict(), MODEL_PATH + self.file_name+'.pt')
     
     def is_time_spent(self):
