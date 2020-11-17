@@ -7,6 +7,7 @@ from my_util import ClippedPPOLoss, ValueFunctionLoss
 import hyperparameters as h
 from datetime import datetime
 from pytz import timezone 
+import time
 
 
 class PPO():
@@ -15,8 +16,6 @@ class PPO():
                 file_name=None):
         
         
-        self.print_output= print_output
-
         #Save parameters from hyperparameters module
         self.total_steps = h.total_steps
         self.num_envs = h.num_envs
@@ -32,10 +31,17 @@ class PPO():
         self.gamma = h.gamma
         self.lmbda = h.lmbda
         self.version = h.version
+        self.time_limit = 60*60*h.time_limit_hours + 60*h.time_limit_minutes + h.time_limit_seconds
 
         #Create file_name
         self.file_name=self.create_file_name(file_name)
-        
+
+        #INIT LOG
+        self.init_log_files()
+
+        self.print_output= print_output
+
+
         #Create Model
         self.encoder = Encoder(in_channels = h.in_channels, feature_dim = h.feature_dim)
         self.policy = Policy(encoder = self.encoder, feature_dim = h.feature_dim, num_actions = 15)
@@ -50,9 +56,6 @@ class PPO():
 
         # Define temporary storage
         self.storage = self.create_storage()
-
-        #INIT LOG
-        self.init_log_files()
 
     
     
@@ -77,15 +80,26 @@ class PPO():
         create_data_file(self.file_name + 'txt')
         add_to_data_file("Parameter name, Value\n", self.file_name+'txt')
 
+        hyperpar_string = ""
+        for key, val in vars(self).items():
+            hyperpar_string += "{}, {}\n".format(key, val)
+        add_to_data_file(hyperpar_string, self.file_name + 'txt')
         #TODO run through hyperparameters and log them
 
     def train(self):
         """
              Run training
         """
+        self.start_time = time.time()
+        
         obs = self.env.reset()
         step = 0
         while step < self.total_steps:
+            #If time limit exceeded:
+            if self.is_time_spent():
+                self.end_training(step)
+                return self.policy
+
             # Use policy to collect data for num_steps steps
             self.run_policy(obs)
 
@@ -101,9 +115,22 @@ class PPO():
 
         if self.print_output:
             print('Completed training!')
-        torch.save(self.policy.state_dict(), MODEL_PATH + self.file_name+'.pt')
+        self.end_training(step)
+        return self.policy
 
 
+    def end_training(self, last_step):
+      #Add to log file
+      add_to_data_file('Time spent (in seconds), {:.2f}\n'.format(time.time()-start_time) + \
+                        "Steps taken, {}\n".format(last_step) + \
+                        "Done, False\n", 
+                        self.file_name + 'txt')
+      torch.save(self.policy.state_dict(), MODEL_PATH + file_name+'.pt')
+    
+    def is_time_spent(self):
+        time_spent = time.time()-self.start_time
+        return time_spent > self.time_limit
+    
     def run_policy(self, obs):
         
         self.policy.eval()
