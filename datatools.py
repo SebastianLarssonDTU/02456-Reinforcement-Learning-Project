@@ -2,8 +2,8 @@ import pandas as pd
 import glob
 from google.colab import drive
 
-DATA_PATH = 'drive/My Drive/02456-Deep-Learning-Project/Data/'
-MODEL_PATH = 'drive/My Drive/02456-Deep-Learning-Project/Models/'
+DATA_PATH = '/content/drive/My Drive/02456-Deep-Learning-Project/Data/'
+MODEL_PATH = '/content/drive/My Drive/02456-Deep-Learning-Project/Models/'
 
 
 def mount_drive():
