@@ -49,6 +49,8 @@ def update_index_file_with_result(df):
             pass
         f.close()
 
+        last_line.rstrip() #to remove a trailing newline
+
         _, reward = last_line.split(",") 
         #add to table
         df['Last Mean Reward'][i] = reward
