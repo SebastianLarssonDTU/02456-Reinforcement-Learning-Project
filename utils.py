@@ -121,7 +121,9 @@ class Storage():
 			reward = self.reward
 		
 		return reward.mean(1).sum(0)
-
+	
+	def current_env(self):
+		yield self.obs, self.action, self.reward, self.done, self.log_prob, self.value, self.returns, self.advantage, self.info, self.step
 
 def orthogonal_init(module, gain=nn.init.calculate_gain('relu')):
 	"""Orthogonal weight initialization: https://arxiv.org/abs/1312.6120"""
