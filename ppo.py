@@ -129,10 +129,9 @@ class PPO():
       
       #Add environment to a csv file
       env_text = ''
-      for x in self.storage.current_env():
+      for x in self.storage.get_generator():
         env_text += str(x)
         env_text += ','
-      print(env_text)  
       create_data_file(self.file_name + '_env.txt')
       add_to_data_file(env_text, self.file_name +'_env.txt')
     
