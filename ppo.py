@@ -132,7 +132,9 @@ class PPO():
       for x in self.storage.current_env():
         env_text += str(x)
         env_text += ','
-      add_to_data_file(env_text, self.file_name +'_env')
+      print(env_text)  
+      create_data_file(self.file_name + '_env.txt')
+      add_to_data_file(env_text, self.file_name +'_env.txt')
     
     def is_time_spent(self):
         time_spent = time.time()-self.start_time
