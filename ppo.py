@@ -126,6 +126,13 @@ class PPO():
                         "Done, False\n", 
                         self.file_name + '.txt')
       torch.save(self.policy.state_dict(), MODEL_PATH + self.file_name+'.pt')
+      
+      #Add environment to a csv file
+      env_text = ''
+      for x in current_env():
+        env_text += str(x)
+        env_text += ','
+      add_to_data_file(env_text, DATA_PATH + self.file_name +'_env.csv')
     
     def is_time_spent(self):
         time_spent = time.time()-self.start_time
