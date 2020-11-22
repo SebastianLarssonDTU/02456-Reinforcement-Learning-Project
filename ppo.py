@@ -125,15 +125,11 @@ class PPO():
                         "Steps taken, {}\n".format(last_step) + \
                         "Done, False\n", 
                         self.file_name + '.txt')
-      torch.save(self.policy.state_dict(), MODEL_PATH + self.file_name+'.pt')
-      
-      #Add environment to a csv file
-      env_text = ''
-      for x in self.storage.get_generator():
-        env_text += str(x)
-        env_text += ','
-      create_data_file(self.file_name + '_env.txt')
-      add_to_data_file(env_text, self.file_name +'_env.txt')
+      torch.save({
+                  'policy_state_dict': self.policy.state_dict(),
+                  'optimizer_state_dict': self.optimizer.state_dict(),
+                 }, MODEL_PATH + self.file_name+'.pt')
+
     
     def is_time_spent(self):
         time_spent = time.time()-self.start_time
