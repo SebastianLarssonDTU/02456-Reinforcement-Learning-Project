@@ -1,5 +1,8 @@
 # 02456-Reinforcement-Learning-Project
 
+Command to run environment interactively:
+python -m procgen.interactive --env-name starpilot --distribution-mode easy >>D:Dropbox/DTU/Logs/test_output.txt
+
 ## Relevant Articles and Git Repos
 Reinforcement Learning with Augmented Data:
 [Article](https://arxiv.org/abs/2004.14990), [Git](https://github.com/MishaLaskin/rad)
