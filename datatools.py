@@ -2,6 +2,11 @@ import pandas as pd
 import glob
 from google.colab import drive
 
+#save/load policy
+import torch
+from model import Encoder
+from policy import Policy
+
 DATA_PATH = '/content/drive/My Drive/02456-Deep-Learning-Project/Data/'
 MODEL_PATH = '/content/drive/My Drive/02456-Deep-Learning-Project/Models/'
 
@@ -55,3 +60,17 @@ def update_index_file_with_result(df):
         #add to table
         df['Last Mean Reward'][i] = reward
     return df
+
+"""
+    have to manually set h parameters to match the policy being loaded. 
+    TODO: Read parameters from .txt file instead. (make sure to save everything needed)
+"""
+def load_policy(file_name):
+  encoder = Encoder(in_channels = h.in_channels, feature_dim = h.feature_dim)  
+  
+  policy = Policy(encoder = encoder, feature_dim = h.feature_dim, num_actions = 15)
+  policy.cuda()
+  policy.load_state_dict(torch.load(MODEL_PATH + file_name + '.pt')["policy_state_dict"])
+  policy.cuda() 
+
+  return policy

@@ -120,16 +120,24 @@ class PPO():
 
 
     def end_training(self, last_step):
-      #Add to log file
-      add_to_data_file('Time spent (in seconds), {:.2f}\n'.format(time.time()-self.start_time) + \
-                        "Steps taken, {}\n".format(last_step) + \
-                        "Done, False\n", 
-                        self.file_name + '.txt')
-      torch.save({
-                  'policy_state_dict': self.policy.state_dict(),
-                  'optimizer_state_dict': self.optimizer.state_dict(),
-                 }, MODEL_PATH + self.file_name+'.pt')
+        #Add to log file
+        add_to_data_file('Time spent (in seconds), {:.2f}\n'.format(time.time()-self.start_time) + \
+                            "Steps taken, {}\n".format(last_step) + \
+                            "Done, False\n", 
+                            self.file_name + '.txt')
+        self.save_policy()
 
+    def save_policy(self):
+        torch.save({
+                    'policy_state_dict': self.policy.state_dict(),
+                    'optimizer_state_dict': self.optimizer.state_dict(),
+                    }, MODEL_PATH + self.file_name+'.pt')
+
+    def load_policy(self, file_name):
+        self.policy.load_state_dict(torch.load(MODEL_PATH + file_name + '.pt')["policy_state_dict"])
+        self.policy.cuda() 
+
+        return self.policy
     
     def is_time_spent(self):
         time_spent = time.time()-self.start_time
