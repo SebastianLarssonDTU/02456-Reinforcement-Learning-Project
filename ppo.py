@@ -88,8 +88,8 @@ class PPO():
             #add header
             header = ""
             for i in range(self.num_levels):
-                header += "env_{} ".format(i)
-            header += "avg \n"
+                header += "env_{},".format(i)
+            header += "avg\n"
             add_to_data_file(header, self.file_name+'_EVAL' + '.csv')
 
         hyperpar_string = ""
@@ -119,6 +119,7 @@ class PPO():
             # Optimize policy
             self.optimize_policy()
 
+            #TODO: put in method
             # Update stats
             step += self.num_envs * self.num_steps
             if self.print_output:
@@ -129,7 +130,7 @@ class PPO():
                 if self.print_output:
                     print("Evaluation done with avg score of {:10f}".format(total_reward))                
                 for key in sorted(all_episode_rewards.keys()):
-                    add_to_data_file("{:10f} ".format(np.mean(all_episode_rewards[key])), self.file_name+'_EVAL' + '.csv')
+                    add_to_data_file("{:10f},".format(np.mean(all_episode_rewards[key])), self.file_name+'_EVAL' + '.csv')
                 add_to_data_file("{}\n".format(total_reward), self.file_name+'_EVAL' + '.csv')
         #end while loop
 
