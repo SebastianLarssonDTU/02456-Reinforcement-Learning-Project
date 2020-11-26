@@ -42,9 +42,6 @@ class PPO():
         self.eval = eval
         self.eval_cycle = eval_cycle
 
-        #INIT LOG
-        self.init_log_files()
-
         self.print_output= print_output
 
 
@@ -103,6 +100,10 @@ class PPO():
         """
              Run training
         """
+        
+        #INIT LOG
+        self.init_log_files()
+        
         self.start_time = time.time()
         
         obs = self.env.reset()
