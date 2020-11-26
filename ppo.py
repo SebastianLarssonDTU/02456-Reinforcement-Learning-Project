@@ -126,9 +126,11 @@ class PPO():
             add_to_data_file("{}, {}\n".format(step, self.storage.get_reward()), self.file_name+'.csv')
             if int((step/(self.num_envs * self.num_steps))%self.eval_cycle) == 0:
                 total_reward, all_episode_rewards = self.evaluate_policy(self.num_levels)
+                if self.print_output:
+                    print("Evaluation done with avg score of {}".format(total_reward))                
                 rewards = ""
                 for key in sorted(all_episode_rewards.keys()):
-                    rewards += "{} ".format(np.mean(rewards[key]))
+                    rewards += "{:10f} ".format(np.mean(rewards[key]))
                 rewards += str(total_reward) + "\n"
                 add_to_data_file(rewards, self.file_name+'_EVAL' + '.csv')
         #end while loop
