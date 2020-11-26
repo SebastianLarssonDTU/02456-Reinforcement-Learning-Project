@@ -21,3 +21,6 @@ feature_dim = 512
 time_limit_hours = 12
 time_limit_minutes = 0
 time_limit_seconds = 0
+value_clipping = False
+death_penalty = False
+encoder = "Nature"

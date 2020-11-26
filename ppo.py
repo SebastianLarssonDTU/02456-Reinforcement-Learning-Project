@@ -16,8 +16,7 @@ class PPO():
                 print_output=False, 
                 file_name=None,
                 eval = False,
-                eval_cycle=16, 
-                encoder = "Nature"):
+                eval_cycle=16):
         
         
         #Save parameters from hyperparameters module
@@ -36,6 +35,8 @@ class PPO():
         self.lmbda = h.lmbda
         self.version = h.version
         self.time_limit = 60*60*h.time_limit_hours + 60*h.time_limit_minutes + h.time_limit_seconds
+        self.value_clipping = h.value_clipping
+        self.death_penalty = h.death_penalty
 
         #Create file_name
         self.file_name=self.create_file_name(file_name)
@@ -47,9 +48,9 @@ class PPO():
 
 
         #Create Model
-        if encoder == "Nature":
+        if h.encoder == "Nature":
             self.encoder = NatureEncoder(in_channels = h.in_channels, feature_dim = h.feature_dim)
-        elif encoder == "Impala":
+        elif h.encoder == "Impala":
             self.encoder = ImpalaEncoder(in_channels=h.in_channels, feature_dim = h.feature_dim)      #TODO
         else:
             raise ValueError('Only valid encoders are "Nature" and "Impala"')
@@ -182,6 +183,8 @@ class PPO():
             
             # Take step in environment
             next_obs, reward, done, info = self.env.step(action)
+            if self.death_penalty:
+                reward = reward - 1*done
 
             # Store data
             self.storage.store(obs, action, reward, done, info, log_prob, value)
@@ -221,8 +224,10 @@ class PPO():
 
                 # # Clipped value function objective
                 # #Assume value_loss = ClippedValueFunctionLoss 
-                value_loss= ValueFunctionLoss(new_value=new_value, 
-                                            old_value= b_value)
+                if self.value_clipping:
+                    value_loss = ClippedValueFunctionLoss(value=new_value, sampled_value=b_value, sampled_return=b_returns, clip=self.eps)
+                else:
+                    value_loss= ValueFunctionLoss(new_value=new_value, old_value= b_value)
 
                 # Entropy loss
                 entropy_loss = new_dist.entropy().mean()
