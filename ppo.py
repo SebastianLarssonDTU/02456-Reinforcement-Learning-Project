@@ -130,9 +130,8 @@ class PPO():
                     print("Evaluation done with avg score of {}".format(total_reward))                
                 rewards = ""
                 for key in sorted(all_episode_rewards.keys()):
-                    rewards += "{:10f} ".format(np.mean(rewards[key]))
-                rewards += str(total_reward) + "\n"
-                add_to_data_file(rewards, self.file_name+'_EVAL' + '.csv')
+                    add_to_data_file("{:10f} ".format(np.mean(rewards[key])), self.file_name+'_EVAL' + '.csv')
+                add_to_data_file("{}\n".format(total_reward), self.file_name+'_EVAL' + '.csv')
         #end while loop
 
         if self.print_output:
