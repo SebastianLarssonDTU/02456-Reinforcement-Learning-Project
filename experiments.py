@@ -16,17 +16,20 @@ def run_experiment(input, par=None, run=True):
         #Baseline PPO (without value clipping)
         set_hyperparameters(baseline="PPO")
         description = "Baseline inspired by PPO article"
+        h.version = "Experiment0"
 
     elif input == 1:
         #Baseline Procgen (without value clipping)
         set_hyperparameters(baseline="Procgen")
         description = "Baseline inspired by Procgen article"
+        h.version = "Experiment1"
 
     elif input == 2:
         #Procgen with value clipping
         set_hyperparameters(baseline="Procgen")
         description = "Modified Procgen baseline with value clipping enabled"
         h.value_clipping = True
+        h.version = "Experiment2"
 
     elif input == 3:
         #Procgen, with value clipping, changed learning rate
@@ -40,6 +43,7 @@ def run_experiment(input, par=None, run=True):
             h.lr = par
         description = "Modified Procgen baseline with value clipping enabled and learning rate {}".format(par)
         h.value_clipping = True
+        h.version = "Experiment3"
 
     elif input == 4:
         #custom penalty for death
@@ -48,17 +52,20 @@ def run_experiment(input, par=None, run=True):
         h.value_clipping = True
         h.death_penalty = True
         #TODO: Implement
+        h.version = "Experiment4"
 
     elif input == 5:
         #Impala encoder with hyperparameters inspired by Impala paper
         set_hyperparameters(baseline="Impala")
         description = "Baseline inspired by IMPALA paper (No value clipping)"
+        h.version = "Experiment5"
 
     elif input == 6:
         #Impala encoder with hyperparameters inspired by Impala paper, and with value clipping
         set_hyperparameters(baseline="Impala")
         description = "Inspired by IMPALA paper (With value clipping)"
         h.value_clipping = True
+        h.version = "Experiment6"
 
     elif input == 7:
         #Mix of Impala architecture and procgen hyperparameters
@@ -66,7 +73,7 @@ def run_experiment(input, par=None, run=True):
         description = "Inspired by both IMPALA and Procgen papers (With value clipping)"
         h.value_clipping = True
         h.batch_size = 512
-
+        h.version = "Experiment7"
     else:
         raise ValueError("Only experiment 0-7 is defined")
 

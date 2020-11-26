@@ -37,9 +37,9 @@ def set_hyperparameters_to_baseline_PPO():
   h.total_steps = 8e6
   h.num_envs = 32
   h.num_levels = 10
-  h.num_steps = 128
+  h.num_steps = 256 #originally 128 in PPO paper (we want it to be comparable to Procgen)
   h.num_epochs = 3
-  h.batch_size = 256
+  h.batch_size = 512 #originally 256 in PPO paper (we want it to be comparable to Procgen)
   h.eps = .1
   h.grad_eps = .5
   h.value_coef = 1
