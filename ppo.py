@@ -252,7 +252,7 @@ class PPO():
             rewards[i] = []
         step_counter = 0
 
-        policy.eval()
+        # policy.eval()
         while True:
 
             # Use policy
