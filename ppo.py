@@ -8,12 +8,15 @@ import hyperparameters as h
 from datetime import datetime
 from pytz import timezone 
 import time
+import numpy as np
 
-
+#region init
 class PPO():
     def __init__(self,
                 print_output=False, 
-                file_name=None):
+                file_name=None,
+                eval = False,
+                eval_cycle=16):
         
         
         #Save parameters from hyperparameters module
@@ -36,6 +39,9 @@ class PPO():
         #Create file_name
         self.file_name=self.create_file_name(file_name)
 
+        self.eval = eval
+        self.eval_cycle = eval_cycle
+
         #INIT LOG
         self.init_log_files()
 
@@ -56,9 +62,6 @@ class PPO():
 
         # Define temporary storage
         self.storage = self.create_storage()
-
-    
-    
     
     def create_storage(self):
         return Storage(self.env.observation_space.shape,
@@ -80,12 +83,22 @@ class PPO():
         create_data_file(self.file_name + '.txt')
         add_to_data_file("Parameter name, Value\n", self.file_name+'.txt')
 
+        if self.eval:
+            create_data_file(self.file_name+'_EVAL' + '.csv')
+            #add header
+            header = ""
+            for i in range(self.num_levels):
+                header += "env_{} ".format(i)
+            header += "avg \n"
+            add_to_data_file(header, self.file_name+'_EVAL' + '.csv')
+
         hyperpar_string = ""
         for key, val in vars(self).items():
             hyperpar_string += "{}, {}\n".format(key, val)
         add_to_data_file(hyperpar_string, self.file_name + '.txt')
         #TODO run through hyperparameters and log them
-
+#endregion
+#region training
     def train(self):
         """
              Run training
@@ -111,6 +124,13 @@ class PPO():
             if self.print_output:
                 print(f'Step: {step}\tMean reward: {self.storage.get_reward()}')
             add_to_data_file("{}, {}\n".format(step, self.storage.get_reward()), self.file_name+'.csv')
+            if int((step/(self.num_envs * self.num_steps))%self.eval_cycle) == 0:
+                total_reward, all_episode_rewards = self.evaluate_policy(self.num_levels)
+                rewards = ""
+                for key in sorted(all_episode_rewards.keys()):
+                    rewards += "{} ".format(np.mean(rewards[key]))
+                rewards += str(total_reward) + "\n"
+                add_to_data_file(rewards, self.file_name+'_EVAL' + '.csv')
         #end while loop
 
         if self.print_output:
@@ -207,3 +227,71 @@ class PPO():
                 # Update policy
                 self.optimizer.step()
                 self.optimizer.zero_grad()
+#endregion
+#region evaluation        
+    def evaluate_policy(self, 
+                        nr_of_levels,
+                        print_output=False):
+        """
+        TODO: Add Video generation
+        """
+        model = self
+        policy = model.policy
+
+        #pick levels we did not train on. 
+        eval_env = make_env(model.num_envs, start_level=model.num_levels, num_levels=nr_of_levels)
+        obs = eval_env.reset()
+
+        #book-keeping
+        completed_envs= []
+        counter_compl_envs = np.zeros(model.num_envs)
+        episode_rewards = np.zeros(model.num_envs)  #current episode rewards
+        rewards = {}
+        for i in range(model.num_envs):
+            rewards[i] = []
+        step_counter = 0
+
+        policy.eval()
+        while True:
+
+            # Use policy
+            action, log_prob, value = policy.act(obs)
+
+            # Take step in environment
+            obs, reward, done, info = eval_env.step(action)
+            
+            #if any reward, update envs still not done
+            for i in range(len(reward)):
+                if reward[i] != 0 and i not in completed_envs:
+                    episode_rewards[i] += reward[i]
+            
+            # If new environment done, complete it
+            for i in [index for index in range(len(done)) if done[index] == True]:
+                if i not in completed_envs:
+                    counter_compl_envs[i] += 1
+                    if print_output:
+                        print("Environment {:2d} completed its {:4d}th level at timestep {:6d} with a reward of {:10f}".format(i, int(counter_compl_envs[i]), step_counter, episode_rewards[i]))
+                    rewards[i].append(episode_rewards[i])
+                    episode_rewards[i] = 0
+                    if counter_compl_envs[i] == nr_of_levels:
+                        completed_envs.append(i)  
+                
+        
+
+            # If all environments are done, break
+            if len(completed_envs) == model.num_envs:
+                break
+            step_counter +=1
+        # end while
+        
+        # Calculate average return
+        total_reward = []
+        for key, value in rewards.items():
+            total_reward.append(sum(value))
+        total_reward = np.mean(total_reward)/nr_of_levels
+
+        if print_output:
+            print('Average return:', total_reward)
+
+        return total_reward, rewards
+#endregion
