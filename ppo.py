@@ -3,7 +3,7 @@ from utils import make_env, Storage, orthogonal_init
 from model import NatureEncoder, ImpalaEncoder
 from policy import Policy
 from datatools import DATA_PATH, MODEL_PATH, create_data_file, add_to_data_file
-from my_util import ClippedPPOLoss, ValueFunctionLoss
+from my_util import ClippedPPOLoss, ValueFunctionLoss, ClippedValueFunctionLoss
 import hyperparameters as h
 from datetime import datetime
 from pytz import timezone 
@@ -91,7 +91,7 @@ class PPO():
             #add header
             header = ""
             for i in range(self.num_envs):
-                header += "env_{}(mean),env_{}(var)".format(i,i)
+                header += "env_{}(mean), env_{}(var),".format(i,i)
             header += "avg\n"
             add_to_data_file(header, self.file_name+'_EVAL' + '.csv')
 
@@ -139,7 +139,7 @@ class PPO():
                 if self.print_output:
                     print("Evaluation done with avg score of {:10f}".format(total_reward))                
                 for key in sorted(all_episode_rewards.keys()):
-                    add_to_data_file("{:10f},{:10f}".format(np.mean(all_episode_rewards[key]), np.var(all_episode_rewards[key])), self.file_name+'_EVAL' + '.csv')
+                    add_to_data_file("{:10f}, {:10f},".format(np.mean(all_episode_rewards[key]), np.var(all_episode_rewards[key])), self.file_name+'_EVAL' + '.csv')
                 add_to_data_file("{:10f}\n".format(total_reward), self.file_name+'_EVAL' + '.csv')
         #end while loop
 
