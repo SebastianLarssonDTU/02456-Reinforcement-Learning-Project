@@ -87,7 +87,7 @@ class PPO():
             create_data_file(self.file_name+'_EVAL' + '.csv')
             #add header
             header = ""
-            for i in range(self.num_levels):
+            for i in range(self.num_envs):
                 header += "env_{},".format(i)
             header += "avg\n"
             add_to_data_file(header, self.file_name+'_EVAL' + '.csv')
