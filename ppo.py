@@ -131,7 +131,7 @@ class PPO():
                     print("Evaluation done with avg score of {:10f}".format(total_reward))                
                 for key in sorted(all_episode_rewards.keys()):
                     add_to_data_file("{:10f},".format(np.mean(all_episode_rewards[key])), self.file_name+'_EVAL' + '.csv')
-                add_to_data_file("{}\n".format(total_reward), self.file_name+'_EVAL' + '.csv')
+                add_to_data_file("{:10f}\n".format(total_reward), self.file_name+'_EVAL' + '.csv')
         #end while loop
 
         if self.print_output:
@@ -293,6 +293,8 @@ class PPO():
 
         if print_output:
             print('Average return:', total_reward)
+
+        policy.train()
 
         return total_reward, rewards
 #endregion
