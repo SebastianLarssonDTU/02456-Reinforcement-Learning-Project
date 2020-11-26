@@ -1,6 +1,6 @@
 import torch
 from utils import make_env, Storage, orthogonal_init
-from model import Encoder
+from model import NatureEncoder, ImpalaEncoder
 from policy import Policy
 from datatools import DATA_PATH, MODEL_PATH, create_data_file, add_to_data_file
 from my_util import ClippedPPOLoss, ValueFunctionLoss
@@ -16,7 +16,8 @@ class PPO():
                 print_output=False, 
                 file_name=None,
                 eval = False,
-                eval_cycle=16):
+                eval_cycle=16, 
+                encoder = "Nature"):
         
         
         #Save parameters from hyperparameters module
@@ -46,7 +47,12 @@ class PPO():
 
 
         #Create Model
-        self.encoder = Encoder(in_channels = h.in_channels, feature_dim = h.feature_dim)
+        if encoder == "Nature":
+            self.encoder = NatureEncoder(in_channels = h.in_channels, feature_dim = h.feature_dim)
+        elif encoder == "Impala":
+            self.encoder = ImpalaEncoder()      #TODO
+        else:
+            raise ValueError('Only valid encoders are "Nature" and "Impala"')
         self.policy = Policy(encoder = self.encoder, feature_dim = h.feature_dim, num_actions = 15)
         self.policy.cuda()
         self.optimizer = h.optimizer(self.policy.parameters(), lr=self.lr, eps=h.opt_extra)
