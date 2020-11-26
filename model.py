@@ -12,7 +12,7 @@ class Encoder(nn.Module):
       Framework for encoder
   """
   def __init__(self):
-    super.__init__()
+    super().__init__()
 
   def forward(self):
     raise NotImplementedError
