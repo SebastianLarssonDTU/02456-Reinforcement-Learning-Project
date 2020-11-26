@@ -4,6 +4,7 @@ def set_hyperparameters(baseline='Procgen'):
   implemented_baselines = {}
   implemented_baselines['Procgen'] = set_hyperparameters_to_baseline_Procgen
   implemented_baselines['PPO'] = set_hyperparameters_to_baseline_PPO
+  implemented_baselines['Impala'] = set_hyperparameters_to_baseline_Impala
 
   if baseline not in implemented_baselines.keys():
     raise NotImplementedError("The implemented baselines are: {}".format(implemented_baselines.keys()))
@@ -51,7 +52,7 @@ def set_hyperparameters_to_baseline_PPO():
   h.death_penalty = False
   h.encoder = "Nature"
 
-  def set_hyperparameters_to_baseline_Impala():
+def set_hyperparameters_to_baseline_Impala():
   h.total_steps = 8e6
   h.num_envs = 32
   h.num_levels = 10
