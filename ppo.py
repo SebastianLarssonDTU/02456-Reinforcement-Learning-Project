@@ -50,7 +50,7 @@ class PPO():
         if encoder == "Nature":
             self.encoder = NatureEncoder(in_channels = h.in_channels, feature_dim = h.feature_dim)
         elif encoder == "Impala":
-            self.encoder = ImpalaEncoder()      #TODO
+            self.encoder = ImpalaEncoder(in_channels=h.in_channels, feature_dim = h.feature_dim)      #TODO
         else:
             raise ValueError('Only valid encoders are "Nature" and "Impala"')
         self.policy = Policy(encoder = self.encoder, feature_dim = h.feature_dim, num_actions = 15)
@@ -259,7 +259,7 @@ class PPO():
             rewards[i] = []
         step_counter = 0
 
-        # policy.eval()
+        policy.eval()
         while True:
 
             # Use policy
