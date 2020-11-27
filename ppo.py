@@ -37,6 +37,7 @@ class PPO():
         self.time_limit = 60*60*h.time_limit_hours + 60*h.time_limit_minutes + h.time_limit_seconds
         self.value_clipping = h.value_clipping
         self.death_penalty = h.death_penalty
+        self.penalty = h.penalty
 
         #Create file_name
         self.file_name=self.create_file_name(file_name)
@@ -184,7 +185,7 @@ class PPO():
             # Take step in environment
             next_obs, reward, done, info = self.env.step(action)
             if self.death_penalty:
-                reward = reward - 1*done
+                reward = reward - self.penalty*done
 
             # Store data
             self.storage.store(obs, action, reward, done, info, log_prob, value)

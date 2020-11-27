@@ -24,3 +24,4 @@ time_limit_seconds = 0
 value_clipping = False
 death_penalty = False
 encoder = "Nature"
+penalty = 1

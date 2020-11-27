@@ -48,10 +48,14 @@ def run_experiment(input, par=None, run=True):
     elif input == 4:
         #custom penalty for death
         set_hyperparameters(baseline='PPO')
-        description = "Modified PPO baseline with value clipping enabled and reward penalty of -1 on death"
+        description = "Modified PPO baseline with value clipping enabled and reward penalty on death (1 as default)"
         h.value_clipping = True
         h.death_penalty = True
-        #TODO: Implement
+        if par is not None:
+            h.penalty = par
+        else:
+            h.penalty = 1
+
         h.version = "Experiment4"
 
     elif input == 5:
