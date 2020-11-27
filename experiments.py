@@ -25,15 +25,15 @@ def run_experiment(input, par=None, run=True):
         h.version = "Experiment1"
 
     elif input == 2:
-        #Procgen with value clipping
-        set_hyperparameters(baseline="Procgen")
-        description = "Modified Procgen baseline with value clipping enabled"
+        #PPO with value clipping
+        set_hyperparameters(baseline="PPO")
+        description = "Modified PPO baseline with value clipping enabled"
         h.value_clipping = True
         h.version = "Experiment2"
 
     elif input == 3:
-        #Procgen, with value clipping, changed learning rate
-        set_hyperparameters(baseline="Procgen")
+        #PPO, with value clipping, changed learning rate
+        set_hyperparameters(baseline="PPO")
         if par is None:
             if run:
                 raise ValueError("Needs new learning rate given to 'par' ")
@@ -41,14 +41,14 @@ def run_experiment(input, par=None, run=True):
                 par = "given by par variable"
         else:
             h.lr = par
-        description = "Modified Procgen baseline with value clipping enabled and learning rate {}".format(par)
+        description = "Modified PPO baseline with value clipping enabled and learning rate {}".format(par)
         h.value_clipping = True
         h.version = "Experiment3"
 
     elif input == 4:
         #custom penalty for death
-        set_hyperparameters(baseline='Procgen')
-        description = "Modified Procgen baseline with value clipping enabled and reward penalty of -1 on death"
+        set_hyperparameters(baseline='PPO')
+        description = "Modified PPO baseline with value clipping enabled and reward penalty of -1 on death"
         h.value_clipping = True
         h.death_penalty = True
         #TODO: Implement
