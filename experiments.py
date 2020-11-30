@@ -5,7 +5,7 @@ from ppo import PPO
 #Experiment with different batch sizes?
 
 def print_list_of_experiments():
-    for i in range(8):
+    for i in range(9):
         run_experiment(i, run=False)
 
 
@@ -78,8 +78,20 @@ def run_experiment(input, par=None, run=True):
         h.value_clipping = True
         h.batch_size = 512
         h.version = "Experiment7"
+    elif input == 8:
+        #experiment 7 with death penalty
+        set_hyperparameters(baseline="Impala")
+        description = "Inspired by both IMPALA and Procgen papers (With value clipping) and added death penalty"
+        h.value_clipping = True
+        h.batch_size = 512
+        h.death_penalty = True
+        if par is not None:
+            h.penalty = par
+        else:
+            h.penalty = 1
+        h.version = "Experiment8"
     else:
-        raise ValueError("Only experiment 0-7 is defined")
+        raise ValueError("Only experiment 0-8 is defined")
 
     print("***** Experiment {} *****".format(input))
     print("Description:    " +description)
