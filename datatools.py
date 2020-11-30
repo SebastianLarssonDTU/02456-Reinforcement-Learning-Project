@@ -38,6 +38,7 @@ def create_index_table_from_txt_files():
         df = df.set_index('Parameter name')
         df = df.transpose()
         final_df = final_df.append(df)
+    final_df['Time spent'] = [str(datetime.timedelta(seconds=math.floor(float(x))))  if x==x  else x for x in list(INDEX['Time spent (in seconds)'])]
     return update_index_file_with_result(final_df)
 
 #TODO: Is this the right result?
