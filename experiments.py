@@ -9,7 +9,7 @@ def print_list_of_experiments():
         run_experiment(i, run=False)
 
 
-def run_experiment(input, par=None, run=True):
+def run_experiment(input, par=None, run=True, levels=10):
 
     #Set hyperparameters
     if input == 0:
@@ -92,6 +92,9 @@ def run_experiment(input, par=None, run=True):
         h.version = "Experiment8"
     else:
         raise ValueError("Only experiment 0-8 is defined")
+
+    h.num_levels = levels
+    h.version = h.version +"_{}levels".format(levels)
 
     print("***** Experiment {} *****".format(input))
     print("Description:    " +description)
