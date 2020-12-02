@@ -166,9 +166,12 @@ class PPO():
                     }, MODEL_PATH + self.file_name+'.pt')
 
     def load_policy(self, file_name):
-        self.policy.load_state_dict(torch.load(MODEL_PATH + file_name + '.pt')["policy_state_dict"])
-        self.policy.cuda() 
+        checkpoint = torch.load(MODEL_PATH + file_name + '.pt')
+        self.policy.load_state_dict(checkpoint["policy_state_dict"])
+        self.policy.cuda()
 
+        self.optimizer.load_state_dict(checkpoint['optimizer_state_dict']) 
+        
         return self.policy
     
     def is_time_spent(self):
