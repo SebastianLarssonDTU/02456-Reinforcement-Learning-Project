@@ -63,7 +63,7 @@ def update_index_file_with_result(df):
         #add to table
         df['Last Mean Reward'][i] = reward
         df["Steps taken"][i] = steps
-        if steps == 8003584:
+        if int(steps) == 8003584:
             df["Done"] = True
         else:
             df["Done"] = False
