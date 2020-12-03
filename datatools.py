@@ -41,6 +41,7 @@ def create_index_table_from_txt_files():
         df = df.transpose()
         final_df = final_df.append(df)
     final_df['Time spent'] = [str(datetime.timedelta(seconds=math.floor(float(x))))  if x==x  else x for x in list(final_df['Time spent (in seconds)'])]
+    final_df = final_df.drop(columns=['Done'])
     return update_index_file_with_result(final_df)
 
 #TODO: Is this the right result?
@@ -63,10 +64,6 @@ def update_index_file_with_result(df):
         #add to table
         df['Last Mean Reward'][i] = reward
         df["Steps taken"][i] = steps
-        if steps == "8003584":
-            df["Done"] = True
-        else:
-            df["Done"] = False
     return df
 
 """
