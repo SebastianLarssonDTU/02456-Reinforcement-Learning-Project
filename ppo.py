@@ -198,8 +198,8 @@ class PPO():
             for sub_str in file_name.split("_"):
                 if "steps" in sub_str or "loaded" in sub_str:
                     break
-                new_name += sub_str
-            file_name = new_name
+                new_name += sub_str+"_"
+            file_name = new_name[:-1]
     
         now = datetime.now(timezone('Europe/Copenhagen'))
         self.file_name = file_name + "_loaded_" +now.strftime("%d%b_%Hh%Mm%Ss")
