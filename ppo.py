@@ -191,6 +191,17 @@ class PPO():
         #save old step count
         if "steps" in file_name:
             self.step_start = int(file_name.split("_")[-1].replace("steps", ""))
+        #manually read last step from file
+        else:
+            f = open(DATA_PATH + file_name +'.csv', "r")
+            for last_line in f:
+                pass
+            f.close()
+
+            last_line = last_line.rstrip() #to remove a trailing newline
+
+            steps, reward = last_line.split(",")
+            self.step_start = int(steps)
 
         #update file_name
         if "steps" in file_name or "loaded" in file_name:
