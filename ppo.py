@@ -170,6 +170,8 @@ class PPO():
         self.save_policy(self.file_name)
 
     def save_policy(self, file_name):
+        if self.print_output:
+            print("Loaded current model in models folder with name {}.pt".format(file_name))
         torch.save({
                     'policy_state_dict': self.policy.state_dict(),
                     'optimizer_state_dict': self.optimizer.state_dict(),
@@ -182,7 +184,7 @@ class PPO():
 
         self.optimizer.load_state_dict(checkpoint['optimizer_state_dict']) 
         if self.print_output:
-            print("Saved current model in models folder with name {}.pt".format(file_name))
+            print("Loaded current model in models folder with name {}.pt".format(file_name))
         return self.policy
     
     def is_time_spent(self):
