@@ -168,7 +168,7 @@ class PPO():
                             "Steps taken, {}\n".format(last_step) + \
                             "Done, False\n", 
                             self.file_name + '.txt')
-        self.save_policy(self.file_name)
+        self.save_policy(self.file_name+"_{}steps".format(self.step_start + last_step))
 
     def save_policy(self, file_name):
         if self.print_output:
