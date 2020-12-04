@@ -40,6 +40,7 @@ class PPO():
         self.death_penalty = h.death_penalty
         self.penalty = h.penalty
         self.save_interval = save_interval
+        self.step_start = 0
 
         #Create file_name
         self.file_name=self.create_file_name(file_name)
@@ -138,7 +139,7 @@ class PPO():
             
             #save model every now and then
             if step > m_counter*self.save_interval:
-                self.save_policy(self.file_name +"_{}steps".format(step))
+                self.save_policy(self.file_name +"_{}steps".format(self.step_start + step))
                 m_counter +=1
             
             # Update stats
@@ -183,8 +184,14 @@ class PPO():
         self.policy.cuda()
 
         self.optimizer.load_state_dict(checkpoint['optimizer_state_dict']) 
+        
         if self.print_output:
             print("Loaded current model from models folder with name {}.pt".format(file_name))
+        
+        if "steps" in file_name:
+            self.step_start = file_name.split("_")[-1].replace("steps.pt", "")
+            self.file_name = file_name.replace("_{}steps".format(self.step_start), "")
+        
         return self.policy
     
     def is_time_spent(self):
