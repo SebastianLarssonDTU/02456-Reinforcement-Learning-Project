@@ -120,7 +120,7 @@ class PPO():
         self.start_time = time.time()
         
         obs = self.env.reset()
-        step = 0
+        step = self.step_start
         m_counter=1
         
         while step < self.total_steps:
@@ -204,7 +204,7 @@ class PPO():
         now = datetime.now(timezone('Europe/Copenhagen'))
         self.file_name = file_name + "_loaded_" +now.strftime("%d%b_%Hh%Mm%Ss")
 
-
+        self.total_steps += self.step_start
             
         return self.policy
     
