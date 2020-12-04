@@ -189,7 +189,7 @@ class PPO():
             print("Loaded current model from models folder with name {}.pt".format(file_name))
         
         if "steps" in file_name:
-            self.step_start = file_name.split("_")[-1].replace("steps.pt", "")
+            self.step_start = int(file_name.split("_")[-1].replace("steps.pt", ""))
             self.file_name = file_name.replace("_{}steps".format(self.step_start), "")
         
         return self.policy
