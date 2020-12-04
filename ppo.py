@@ -138,7 +138,7 @@ class PPO():
             #TODO: put in method
             
             #save model every now and then
-            if step > m_counter*self.save_interval:
+            if step > self.step_start + m_counter*self.save_interval:
                 self.save_policy(self.file_name +"_{}steps".format(self.step_start + step))
                 m_counter +=1
             
