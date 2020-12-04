@@ -16,7 +16,8 @@ class PPO():
                 print_output=False, 
                 file_name=None,
                 eval = False,
-                eval_cycle=16):
+                eval_cycle=16,
+                save_interval = 1e6):
         
         
         #Save parameters from hyperparameters module
@@ -38,6 +39,7 @@ class PPO():
         self.value_clipping = h.value_clipping
         self.death_penalty = h.death_penalty
         self.penalty = h.penalty
+        self.save_interval = save_interval
 
         #Create file_name
         self.file_name=self.create_file_name(file_name)
@@ -118,6 +120,8 @@ class PPO():
         
         obs = self.env.reset()
         step = 0
+        m_counter=1
+        
         while step < self.total_steps:
             #If time limit exceeded:
             if self.is_time_spent():
@@ -131,6 +135,12 @@ class PPO():
             self.optimize_policy()
 
             #TODO: put in method
+            
+            #save model every now and then
+            if step > m_counter*self.save_interval:
+                self.save_policy(self.file_name +"{}M_steps".format(m_counter))
+                m_counter +=1
+            
             # Update stats
             step += self.num_envs * self.num_steps
             if self.print_output:
@@ -157,13 +167,13 @@ class PPO():
                             "Steps taken, {}\n".format(last_step) + \
                             "Done, False\n", 
                             self.file_name + '.txt')
-        self.save_policy()
+        self.save_policy(self.file_name)
 
-    def save_policy(self):
+    def save_policy(self, file_name):
         torch.save({
                     'policy_state_dict': self.policy.state_dict(),
                     'optimizer_state_dict': self.optimizer.state_dict(),
-                    }, MODEL_PATH + self.file_name+'.pt')
+                    }, MODEL_PATH + file_name+'.pt')
 
     def load_policy(self, file_name):
         checkpoint = torch.load(MODEL_PATH + file_name + '.pt')
