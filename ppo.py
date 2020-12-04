@@ -188,10 +188,12 @@ class PPO():
         if self.print_output:
             print("Loaded current model from models folder with name {}.pt".format(file_name))
         
+        now = datetime.now(timezone('Europe/Copenhagen'))
         if "steps" in file_name:
             self.step_start = int(file_name.split("_")[-1].replace("steps", ""))
-            self.file_name = file_name.replace("_{}steps".format(self.step_start), "")
-        
+            self.file_name = file_name.replace("_{}steps".format(self.step_start), "") + "_loaded_" +now.strftime("%d%b_%Hh%Mm%Ss")
+        else:
+            self.file_name = file_name + "_loaded_" +now.strftime("%d%b_%Hh%Mm%Ss")
         return self.policy
     
     def is_time_spent(self):
