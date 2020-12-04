@@ -138,7 +138,7 @@ class PPO():
             
             #save model every now and then
             if step > m_counter*self.save_interval:
-                self.save_policy(self.file_name +"{}M_steps".format(m_counter))
+                self.save_policy(self.file_name +"{}_steps".format(step))
                 m_counter +=1
             
             # Update stats
@@ -181,7 +181,8 @@ class PPO():
         self.policy.cuda()
 
         self.optimizer.load_state_dict(checkpoint['optimizer_state_dict']) 
-        
+        if self.print_output:
+            print("Saved current model in models folder with name {}.pt".format(file_name))
         return self.policy
     
     def is_time_spent(self):
