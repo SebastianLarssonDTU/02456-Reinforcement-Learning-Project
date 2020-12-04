@@ -9,7 +9,7 @@ def print_list_of_experiments():
         run_experiment(i, run=False)
 
 
-def run_experiment(input, par=None, run=True, levels=10):
+def run_experiment(input, par=None, run=True, levels=10, load_model=False, path=None, save_interval=1e6):
 
     #Set hyperparameters
     if input == 0:
@@ -100,7 +100,7 @@ def run_experiment(input, par=None, run=True, levels=10):
     print("Description:    " +description)
     if run:
         #Create Model
-        model = PPO(print_output=True, eval=True)
+        model = PPO(print_output=True, eval=True, save_interval=save_interval)
         
         #Train
         model.train()
