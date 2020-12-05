@@ -120,7 +120,7 @@ class PPO():
         self.start_time = time.time()
         
         #obs = self.env.reset()
-        self.framestack = VecFrameStack(self.env, 4)
+        self.framestack = VecFrameStack(self.env, h.nstack)
         obs = self.framestack.reset()
         obs = torch.from_numpy(obs)
         
@@ -237,7 +237,7 @@ class PPO():
             
             # Take step in environment
             #next_obs, reward, done, info = self.env.step(action)
-            next_obs, reward, done, info = framestack.step_wait()
+            next_obs, reward, done, info = self.framestack.step_wait()
             next_obs = torch.from_numpy(next_obs)
             if self.death_penalty:
                 reward = reward - self.penalty*done
