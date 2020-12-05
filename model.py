@@ -36,7 +36,7 @@ class NatureEncoder(Encoder):
     self.apply(orthogonal_init)
 
   def forward(self, x):
-    print("0: ",x.size)
+    print("0: ",x.shape)
     return self.layers(x)
 #endregion
 
