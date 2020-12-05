@@ -36,7 +36,6 @@ class NatureEncoder(Encoder):
     self.apply(orthogonal_init)
 
   def forward(self, x):
-    print("0: ",x.shape)
     return self.layers(x)
 #endregion
 
@@ -63,11 +62,17 @@ class ImpalaEncoder(Encoder):
 
   def forward(self, x):
     x = self.block1(x)
+    print("0: ",x.shape)
     x = self.block2(x)
+    print("1: ",x.shape)
     x = self.block3(x)
+    print("2: ",x.shape)
     x = nn.ReLU()(x)
+    print("3: ",x.shape)
     x = Flatten()(x)
+    print("4: ",x.shape)
     x = self.fc(x)
+    print("5: ",x.shape)
     x = nn.ReLU()(x)
     return x
 
