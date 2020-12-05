@@ -30,7 +30,7 @@ class NatureEncoder(Encoder):
         nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1), 
         nn.ReLU(),
         Flatten(),
-        nn.Linear(in_features=1024, out_features=feature_dim), 
+        nn.Linear(in_features=1024 * h.nstack, out_features=feature_dim), 
         nn.ReLU()
     )
     self.apply(orthogonal_init)
@@ -56,23 +56,17 @@ class ImpalaEncoder(Encoder):
     self.block1 = ImpalaBlock(in_channels=in_channels, out_channels=16)
     self.block2 = ImpalaBlock(in_channels=16, out_channels=32)
     self.block3 = ImpalaBlock(in_channels=32, out_channels=32)
-    self.fc = nn.Linear(in_features=32 * 8 * 8 * 4, out_features=self.output_dim)
+    self.fc = nn.Linear(in_features=32 * 8 * 8 * h.nstack, out_features=self.output_dim)
 
     self.apply(xavier_uniform_init)
 
   def forward(self, x):
     x = self.block1(x)
-    print("0: ",x.shape)
     x = self.block2(x)
-    print("1: ",x.shape)
     x = self.block3(x)
-    print("2: ",x.shape)
     x = nn.ReLU()(x)
-    print("3: ",x.shape)
     x = Flatten()(x)
-    print("4: ",x.shape)
     x = self.fc(x)
-    print("5: ",x.shape)
     x = nn.ReLU()(x)
     return x
 
