@@ -403,6 +403,7 @@ class VecFrameStack(VecEnvWrapper):
 		self.stackedobs[...] = 0
 		self.stackedobs[..., -obs.shape[-1]:] = obs
 		print("obs shape: ",obs.shape)
+		self.stackedobs = torch.from_numpy(self.stackedobs)
 		print("stackedobs shape: ", self.stackedobs.shape)
 		#self.stackedobs = self.sf01(self.stackedobs)
 		return self.stackedobs
