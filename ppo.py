@@ -120,7 +120,8 @@ class PPO():
         self.start_time = time.time()
         
         #obs = self.env.reset()
-        obs = VecFrameStack.reset()
+        self.framestack = VecFrameStack(self.env, 4)
+        obs = self.framestack.reset()
         step = self.step_start
         m_counter=1
         
@@ -234,7 +235,7 @@ class PPO():
             
             # Take step in environment
             #next_obs, reward, done, info = self.env.step(action)
-            next_obs, reward, done, info = VecFrameStack.step_wait()
+            next_obs, reward, done, info = framestack.step_wait()
             if self.death_penalty:
                 reward = reward - self.penalty*done
 
