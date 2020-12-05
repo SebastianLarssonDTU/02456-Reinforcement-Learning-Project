@@ -1,5 +1,5 @@
 import torch
-from utils import make_env, Storage, orthogonal_init
+from utils import make_env, Storage, orthogonal_init, VecFrameStack
 from model import NatureEncoder, ImpalaEncoder
 from policy import Policy
 from datatools import DATA_PATH, MODEL_PATH, create_data_file, add_to_data_file
