@@ -41,6 +41,7 @@ class PPO():
         self.penalty = h.penalty
         self.save_interval = save_interval
         self.step_start = 0
+        self.nstack = h.nstack
 
         #Create file_name
         self.file_name=self.create_file_name(file_name)
@@ -72,7 +73,9 @@ class PPO():
         self.storage = self.create_storage()
     
     def create_storage(self):
-        return Storage(torch.from_numpy(np.array([32,3,64,64*h.nstack])),
+        self.obs_space_shape = self.env.observation_space.shape
+        self.obs_space_shape[3] = self.obs_space_shape[3]*self.nstack
+        return Storage(self.obs_space_shape,
                        self.num_steps,
                        self.num_envs,
                        gamma = self.gamma,
