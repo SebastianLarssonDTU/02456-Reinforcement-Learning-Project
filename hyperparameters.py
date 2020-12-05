@@ -25,3 +25,4 @@ value_clipping = False
 death_penalty = False
 encoder = "Nature"
 penalty = 1
+nstack = 4
