@@ -402,8 +402,8 @@ class VecFrameStack(VecEnvWrapper):
 		obs = self.venv.reset()
 		self.stackedobs[...] = 0
 		self.stackedobs[..., -obs.shape[-1]:] = obs
-		print("obs shape: ",obs.shape())
-		print("stackedobs shape: ", self.stackedobs.shape())
+		print("obs shape: ",obs.shape)
+		print("stackedobs shape: ", self.stackedobs.shape)
 		#self.stackedobs = self.sf01(self.stackedobs)
 		return self.stackedobs
 	
