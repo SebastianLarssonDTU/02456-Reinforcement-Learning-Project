@@ -94,9 +94,9 @@ class PPO():
         if self.eval:
             create_data_file(self.file_name+'_EVAL' + '.csv')
             #add header
-            header = ""
+            header = "step,"
             for i in range(self.num_envs):
-                header += "env_{}(mean), env_{}(var),".format(i,i)
+                header += "env_{}(mean),env_{}(var),".format(i,i)
             header += "avg\n"
             add_to_data_file(header, self.file_name+'_EVAL' + '.csv')
 
@@ -151,6 +151,7 @@ class PPO():
                 total_reward, all_episode_rewards = self.evaluate_policy(self.num_levels)
                 if self.print_output:
                     print("Evaluation done with avg score of {:10f}".format(total_reward))                
+                add_to_data_file("{},".format(step), self.file_name+'_EVAL' + '.csv')
                 for key in sorted(all_episode_rewards.keys()):
                     add_to_data_file("{:10f}, {:10f},".format(np.mean(all_episode_rewards[key]), np.var(all_episode_rewards[key])), self.file_name+'_EVAL' + '.csv')
                 add_to_data_file("{:10f}\n".format(total_reward), self.file_name+'_EVAL' + '.csv')
