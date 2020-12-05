@@ -72,7 +72,7 @@ class PPO():
         self.storage = self.create_storage()
     
     def create_storage(self):
-        return Storage(torch.from_numpy(np.array([32,3,64,256])),
+        return Storage(torch.from_numpy(np.array([32,3,64,64*h.nstack])),
                        self.num_steps,
                        self.num_envs,
                        gamma = self.gamma,
