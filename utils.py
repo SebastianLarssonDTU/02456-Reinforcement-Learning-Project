@@ -395,13 +395,22 @@ class VecFrameStack(VecEnvWrapper):
 			if new:
 				self.stackedobs[i] = 0
 		self.stackedobs[..., -obs.shape[-1]:] = obs
+		self.stackedobs = self.sf01(self.stackedobs)
 		return self.stackedobs, rews, news, infos
 
 	def reset(self):
 		obs = self.venv.reset()
 		self.stackedobs[...] = 0
 		self.stackedobs[..., -obs.shape[-1]:] = obs
+		self.stackedobs = self.sf01(self.stackedobs)
 		return self.stackedobs
+	
+	def sf01(arr):
+	    """
+	    swap and then flatten axes 0 and 1
+	    """
+	    s = arr.shape
+	    return arr.swapaxes(0, 1).reshape(s[0] * s[1], *s[2:])
 	
 class VecExtractDictObs(VecEnvObservationWrapper):
 	def __init__(self, venv, key):
