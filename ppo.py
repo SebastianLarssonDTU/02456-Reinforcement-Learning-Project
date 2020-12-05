@@ -72,11 +72,16 @@ class PPO():
         self.storage = self.create_storage()
     
     def create_storage(self):
-        return Storage(self.env.observation_space.shape,
+        return Storage(torch.from_numpy(np.array([32,3,64,256])),
                        self.num_steps,
                        self.num_envs,
                        gamma = self.gamma,
                        lmbda = self.lmbda)
+#         return Storage(self.env.observation_space.shape,
+#                        self.num_steps,
+#                        self.num_envs,
+#                        gamma = self.gamma,
+#                        lmbda = self.lmbda)
 
     def create_file_name(self, file_name):
         if file_name is not None:
