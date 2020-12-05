@@ -74,6 +74,7 @@ class PPO():
     
     def create_storage(self):
         self.obs_space_shape = self.env.observation_space.shape
+        print(self.obs_space_shape)
         self.obs_space_shape[3] = self.obs_space_shape[3]*self.nstack
         return Storage(self.obs_space_shape,
                        self.num_steps,
