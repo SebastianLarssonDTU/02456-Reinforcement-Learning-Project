@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 from utils import orthogonal_init
 from my_util import xavier_uniform_init
+import hyperparameters as h
 
 class Flatten(nn.Module):
     def forward(self, x):
