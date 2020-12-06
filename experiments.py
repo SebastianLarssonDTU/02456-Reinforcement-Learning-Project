@@ -5,18 +5,22 @@ from ppo import PPO
 #Experiment with different batch sizes?
 
 def print_list_of_experiments():
-    for i in range(10):
+    for i in range(9):
         run_experiment(i, run=False)
 
 
-def run_experiment(input, par=None, run=True, levels=10, load_model=False, path=None, save_interval=1e6):
-
+def run_experiment(input, par=None, run=True, levels=10, load_model=False, path=None, save_interval=1e6, nstack=1):
+    
+    #To apply frame stacking, simply give it an argument nstack != 1, which is the number of frames that should be stacked
+    h.nstack = nstack
+    
     #Set hyperparameters
     if input == 0:
         #Baseline PPO (without value clipping)
         set_hyperparameters(baseline="PPO")
         description = "Baseline inspired by PPO article"
         h.version = "Experiment0"
+        
 
     elif input == 1:
         #Baseline Procgen (without value clipping)
@@ -90,12 +94,6 @@ def run_experiment(input, par=None, run=True, levels=10, load_model=False, path=
         else:
             h.penalty = 1
         h.version = "Experiment8"
-    elif input == 9:
-        #Impala encoder with hyperparameters inspired by Impala paper
-        set_hyperparameters(baseline="Impala")
-        description = "Testing frame stacking with impala"
-        h.version = "Experiment9"
-        h.nstack = par
     else:
         raise ValueError("Only experiment 0-8 is defined")
 
