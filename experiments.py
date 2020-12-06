@@ -90,6 +90,12 @@ def run_experiment(input, par=None, run=True, levels=10, load_model=False, path=
         else:
             h.penalty = 1
         h.version = "Experiment8"
+    elif input == 9:
+        #Impala encoder with hyperparameters inspired by Impala paper
+        set_hyperparameters(baseline="Impala")
+        description = "Testing frame stacking with impala"
+        h.version = "Experiment9"
+        h.nstack = 4
     else:
         raise ValueError("Only experiment 0-8 is defined")
 
