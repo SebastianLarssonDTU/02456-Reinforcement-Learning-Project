@@ -348,8 +348,8 @@ class PPO():
             if h.nstack == 1:
                 obs, reward, done, info = eval_env.step(action)
             else:
-                _, reward, done, info = eval_env.step(action)
-                obs, _, _, _ = eval_framestack.step_wait()
+                _, _, done, info = eval_env.step(action)
+                obs, reward, _, _ = eval_framestack.step_wait()
                 obs = torch.from_numpy(obs)
             
             #if any reward, update envs still not done
