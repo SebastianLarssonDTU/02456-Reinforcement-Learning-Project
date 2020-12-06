@@ -325,7 +325,7 @@ class PPO():
         if h.nstack == 1:
             obs = eval_env.reset()
         else:
-            self.framestack = VecFrameStack(self.env, h.nstack)
+            self.framestack = VecFrameStack(eval_env, h.nstack)
             obs = self.framestack.reset()
             obs = torch.from_numpy(obs)
 
@@ -348,7 +348,7 @@ class PPO():
             if h.nstack == 1:
                 next_obs, reward, done, info = eval_env.step(action)
             else:
-                _, reward, done, info = self.env.step(action)
+                _, reward, done, info = eval_env.step(action)
                 next_obs, _, _, _ = self.framestack.step_wait()
                 next_obs = torch.from_numpy(next_obs)
             
