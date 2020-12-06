@@ -322,7 +322,12 @@ class PPO():
 
         #pick levels we did not train on. 
         eval_env = make_env(model.num_envs, start_level=model.num_levels, num_levels=nr_of_levels)
-        obs = eval_env.reset()
+        if h.nstack == 1:
+            obs = self.env.reset()
+        else:
+            self.framestack = VecFrameStack(self.env, h.nstack)
+            obs = self.framestack.reset()
+            obs = torch.from_numpy(obs)
 
         #book-keeping
         completed_envs= []
