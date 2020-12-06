@@ -346,7 +346,7 @@ class PPO():
 
             # Take step in environment
             if h.nstack == 1:
-                next_obs, reward, done, info = self.env.step(action)
+                next_obs, reward, done, info = eval_env.step(action)
             else:
                 _, reward, done, info = self.env.step(action)
                 next_obs, _, _, _ = self.framestack.step_wait()
