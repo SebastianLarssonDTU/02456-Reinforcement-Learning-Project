@@ -246,7 +246,8 @@ class PPO():
             if h.nstack == 1:
                 next_obs, reward, done, info = self.env.step(action)
             else:
-                next_obs, reward, done, info = self.framestack.step_wait()
+                _, reward, done, info = self.env.step(action)
+                next_obs, _, _, _ = self.framestack.step_wait()
                 next_obs = torch.from_numpy(next_obs)
                 
             if self.death_penalty:
