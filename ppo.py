@@ -107,7 +107,7 @@ class PPO():
 
         hyperpar_string = ""
         for key, val in vars(self).items():
-            if key in ["encoder", "print_output", "policy", "optimizer", "storage", "env", "obs_space_shape", "obs_space"]:
+            if key in ["encoder", "print_output", "policy", "optimizer", "storage", "env", "obs_space_shape", "obs_shape"]:
                 continue
             hyperpar_string += "{}, {}\n".format(key, val)
         add_to_data_file(hyperpar_string, self.file_name + '.txt')
