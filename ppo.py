@@ -345,7 +345,12 @@ class PPO():
             action, log_prob, value = policy.act(obs)
 
             # Take step in environment
-            obs, reward, done, info = eval_env.step(action)
+            if h.nstack == 1:
+                next_obs, reward, done, info = self.env.step(action)
+            else:
+                _, reward, done, info = self.env.step(action)
+                next_obs, _, _, _ = self.framestack.step_wait()
+                next_obs = torch.from_numpy(next_obs)
             
             #if any reward, update envs still not done
             for i in range(len(reward)):
