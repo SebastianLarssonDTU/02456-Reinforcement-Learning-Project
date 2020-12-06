@@ -13,6 +13,10 @@ def run_experiment(input, par=None, run=True, levels=10, load_model=False, path=
     
     #To apply frame stacking, simply give it an argument nstack != 1, which is the number of frames that should be stacked
     h.nstack = nstack
+    if h.nstack != 1:
+        h.num_envs = h.num_envs/int(h.nstack/2) 
+        if h.num_envs != 32:
+            print("Because of frame stacking, the number of environments has been reduced to ", h.num_envs)
     
     #Set hyperparameters
     if input == 0:
