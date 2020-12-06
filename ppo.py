@@ -139,7 +139,7 @@ class PPO():
             
             #save model every now and then
             if step > self.step_start + m_counter*self.save_interval:
-                self.save_policy(self.file_name +"_{}steps".format(self.step_start + step))
+                self.save_policy(self.file_name +"_{}steps".format(step))
                 m_counter +=1
             
             # Update stats
@@ -169,7 +169,7 @@ class PPO():
                             "Steps taken, {}\n".format(last_step) + \
                             "Done, False\n", 
                             self.file_name + '.txt')
-        self.save_policy(self.file_name+"_{}steps".format(self.step_start + last_step))
+        self.save_policy(self.file_name+"_{}steps".format(last_step))
 
     def save_policy(self, file_name):
         if self.print_output:
