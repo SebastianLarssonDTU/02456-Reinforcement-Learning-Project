@@ -5,7 +5,7 @@ from ppo import PPO
 #Experiment with different batch sizes?
 
 def print_list_of_experiments():
-    for i in range(9):
+    for i in range(10):
         run_experiment(i, run=False)
 
 
@@ -95,7 +95,7 @@ def run_experiment(input, par=None, run=True, levels=10, load_model=False, path=
         set_hyperparameters(baseline="Impala")
         description = "Testing frame stacking with impala"
         h.version = "Experiment9"
-        h.nstack = 4
+        h.nstack = par
     else:
         raise ValueError("Only experiment 0-8 is defined")
 
