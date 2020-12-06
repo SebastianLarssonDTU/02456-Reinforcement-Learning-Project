@@ -73,20 +73,15 @@ class PPO():
         self.storage = self.create_storage()
     
     def create_storage(self):
+        
         self.obs_shape = self.env.observation_space.shape
-        print(self.obs_shape)
         self.obs_space_shape = (self.obs_shape[0], self.obs_shape[1], self.obs_shape[2]*self.nstack)
-        print(self.obs_space_shape)
+        
         return Storage(self.obs_space_shape,
                        self.num_steps,
                        self.num_envs,
                        gamma = self.gamma,
                        lmbda = self.lmbda)
-#         return Storage(self.env.observation_space.shape,
-#                        self.num_steps,
-#                        self.num_envs,
-#                        gamma = self.gamma,
-#                        lmbda = self.lmbda)
 
     def create_file_name(self, file_name):
         if file_name is not None:
@@ -129,10 +124,12 @@ class PPO():
         
         self.start_time = time.time()
         
-        #obs = self.env.reset()
-        self.framestack = VecFrameStack(self.env, h.nstack)
-        obs = self.framestack.reset()
-        obs = torch.from_numpy(obs)
+        if h.nstack == 1:
+            obs = self.env.reset()
+        else:
+            self.framestack = VecFrameStack(self.env, h.nstack)
+            obs = self.framestack.reset()
+            obs = torch.from_numpy(obs)
         
         step = self.step_start
         m_counter=1
@@ -246,9 +243,12 @@ class PPO():
             action, log_prob, value = self.policy.act(obs)
             
             # Take step in environment
-            #next_obs, reward, done, info = self.env.step(action)
-            next_obs, reward, done, info = self.framestack.step_wait()
-            next_obs = torch.from_numpy(next_obs)
+            if h.nstack == 1:
+                next_obs, reward, done, info = self.env.step(action)
+            else:
+                next_obs, reward, done, info = self.framestack.step_wait()
+                next_obs = torch.from_numpy(next_obs)
+                
             if self.death_penalty:
                 reward = reward - self.penalty*done
 
