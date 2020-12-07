@@ -353,7 +353,7 @@ class PPO():
                 obs = torch.from_numpy(obs)
                 print(reward)
             print(reward)
-            print(nstack)
+            print(h.nstack)
                 
             
             #if any reward, update envs still not done
