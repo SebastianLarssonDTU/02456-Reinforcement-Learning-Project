@@ -251,9 +251,12 @@ class PPO():
             if h.nstack == 1:
                 next_obs, reward, done, info = self.env.step(action)
             else:
-                _, reward, done, info = self.env.step(action)
-                next_obs, _, _, _ = self.framestack.step_wait()
-                next_obs = torch.from_numpy(next_obs)
+#                 _, reward, done, info = self.env.step(action)
+#                 next_obs, _, _, _ = self.framestack.step_wait()
+#                 next_obs = torch.from_numpy(next_obs)
+                
+                next_obs, reward, done, info = self.env.step(action)
+                next_obs = torch.from_numpy(self.framestack.stacked_obs(next_obs))
                 
             if self.death_penalty:
                 reward = reward - self.penalty*done
@@ -353,9 +356,12 @@ class PPO():
             if h.nstack == 1:
                 obs, reward, done, info = eval_env.step(action)
             else:
-                _, reward, done, info = eval_env.step(action)
-                obs, _, _, _ = eval_framestack.step_wait()
-                obs = torch.from_numpy(obs)
+#                 _, reward, done, info = eval_env.step(action)
+#                 obs, _, _, _ = eval_framestack.step_wait()
+#                 obs = torch.from_numpy(obs)
+
+                obs, reward, done, info = eval_env.step(action)
+                obs = torch.from_numpy(eval_framestack.stacked_obs(obs))
                 
             
             #if any reward, update envs still not done
