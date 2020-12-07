@@ -352,6 +352,8 @@ class PPO():
                 obs, _, _, _ = eval_framestack.step_wait()
                 obs = torch.from_numpy(obs)
                 print(reward)
+            print(reward)
+            print(nstack)
                 
             
             #if any reward, update envs still not done
