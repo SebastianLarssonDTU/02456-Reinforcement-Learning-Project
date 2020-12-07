@@ -351,8 +351,7 @@ class PPO():
                 _, reward, done, info = eval_env.step(action)
                 obs, _, _, _ = eval_framestack.step_wait()
                 obs = torch.from_numpy(obs)
-                print(reward)
-            print(reward)
+                print("I'm here!")
             print(h.nstack)
                 
             
