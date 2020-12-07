@@ -53,3 +53,24 @@ Find optimal hyperparameters and continue with those
 * Talk later...
 
 ## Testing Phase 3
+
+# Experiments done
+
+## 10 levels
+* all experiments 1-8
+* (3)  with learning rates 0.0025, 2.5e-05
+* (4) with death penalty 1, 3
+* (8) with death penalty 1, 3, 7
+
+## 50 levels
+* (2) long (10M atm - to be continued)
+* (4) with death penalty 5
+* (7) long (11M atm - to be continued)
+* (8) with death penalty 1, 5, 10, 20 
+
+
+## 100 levels
+* Experiment 2 and 7 (to be continued)
+
+## 200 levels
+* Experiment 7 and 8 (to be continued)
