@@ -403,6 +403,15 @@ class VecFrameStack(VecEnvWrapper):
 		self.stackedobs[..., -obs.shape[-1]:] = obs
 		return self.stackedobs
 	
+	def stacked_obs(self, obs):
+		_, _, news, _ = self.venv.step_wait()
+		self.stackedobs = np.roll(self.stackedobs, shift=-1, axis=-1)
+		for (i, new) in enumerate(news):
+			if new:
+				self.stackedobs[i] = 0
+		self.stackedobs[..., -obs.shape[-1]:] = obs
+		return self.stackedobs
+	
 class VecExtractDictObs(VecEnvObservationWrapper):
 	def __init__(self, venv, key):
 		self.key = key
