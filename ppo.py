@@ -65,7 +65,7 @@ class PPO():
         self.policy = Policy(encoder = self.encoder, feature_dim = h.feature_dim, num_actions = 15)
         self.policy.cuda()
         self.optimizer = h.optimizer(self.policy.parameters(), lr=self.lr, eps=h.opt_extra)
-        self.env = make_env(self.num_envs, num_levels=self.num_levels, dist_mode = self.dist_mode, use_background = self.use_background)
+        self.env = make_env(self.num_envs, num_levels=self.num_levels, dist_mode = self.dist_mode, use_backgrounds = self.use_background)
 
         #print
         if print_output:
@@ -316,7 +316,7 @@ class PPO():
                             num_levels=nr_of_levels, 
                             normalize_reward=normalize_reward, 
                             dist_mode = eval_dist_mode, 
-                            use_background = eval_use_background)
+                            use_backgrounds = eval_use_background)
         obs = eval_env.reset()
 
         #book-keeping
