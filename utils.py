@@ -32,12 +32,13 @@ def make_env(
 	"""Make environment for procgen experiments"""
 	set_global_seeds(seed)
 	set_global_log_levels(40)
+	dist_mode = 'easy'
 	env = ProcgenEnv(
 		num_envs=n_envs,
 		env_name=env_name,
 		start_level=start_level,
 		num_levels=num_levels,
-		distribution_mode='easy',
+		distribution_mode=dist_mode,
 		use_backgrounds=use_backgrounds,
 		restrict_themes=not use_backgrounds,
 		render_mode='rgb_array',
