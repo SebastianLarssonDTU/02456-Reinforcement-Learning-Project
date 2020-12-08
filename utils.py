@@ -27,12 +27,13 @@ def make_env(
 	use_backgrounds=False,
 	normalize_obs=False,
 	normalize_reward=True,
-	seed=0
+	seed=0,
+	dist_mode = 'easy'
 	):
 	"""Make environment for procgen experiments"""
 	set_global_seeds(seed)
 	set_global_log_levels(40)
-	dist_mode = 'easy'
+	
 	env = ProcgenEnv(
 		num_envs=n_envs,
 		env_name=env_name,
