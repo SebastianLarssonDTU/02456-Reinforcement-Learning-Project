@@ -296,7 +296,8 @@ class PPO():
 #region evaluation        
     def evaluate_policy(self, 
                         nr_of_levels,
-                        print_output=False):
+                        print_output=False,
+                        normalize_reward = True):
         """
         TODO: Add Video generation
         """
@@ -304,7 +305,7 @@ class PPO():
         policy = model.policy
 
         #pick levels we did not train on. 
-        eval_env = make_env(model.num_envs, start_level=model.num_levels, num_levels=nr_of_levels)
+        eval_env = make_env(model.num_envs, start_level=model.num_levels, num_levels=nr_of_levels, normalize_reward=normalize_reward)
         obs = eval_env.reset()
 
         #book-keeping
