@@ -17,7 +17,8 @@ class PPO():
                 file_name=None,
                 eval = False,
                 eval_cycle=16,
-                save_interval = 1e6):
+                save_interval = 1e6,
+                dist_mode = 'easy'):
         
         
         #Save parameters from hyperparameters module
@@ -41,6 +42,7 @@ class PPO():
         self.penalty = h.penalty
         self.save_interval = save_interval
         self.step_start = 0
+        self.dist_mode = dist_mode
 
         #Create file_name
         self.file_name=self.create_file_name(file_name)
@@ -61,7 +63,7 @@ class PPO():
         self.policy = Policy(encoder = self.encoder, feature_dim = h.feature_dim, num_actions = 15)
         self.policy.cuda()
         self.optimizer = h.optimizer(self.policy.parameters(), lr=self.lr, eps=h.opt_extra)
-        self.env = make_env(self.num_envs, num_levels=self.num_levels)
+        self.env = make_env(self.num_envs, num_levels=self.num_levels, dist_mode = self.dist_mode)
 
         #print
         if print_output:
@@ -148,7 +150,7 @@ class PPO():
                 print(f'Step: {step}\tMean reward: {self.storage.get_reward()}')
             add_to_data_file("{}, {}\n".format(step, self.storage.get_reward()), self.file_name+'.csv')
             if int((step/(self.num_envs * self.num_steps))%self.eval_cycle) == 0:
-                total_reward, all_episode_rewards = self.evaluate_policy(min(50,self.num_levels))
+                total_reward, all_episode_rewards = self.evaluate_policy(min(50,self.num_levels), eval_dist_mode = self.dist_mode)
                 if self.print_output:
                     print("Evaluation done with avg score of {:10f}".format(total_reward))                
                 add_to_data_file("{},".format(step), self.file_name+'_EVAL' + '.csv')
@@ -297,7 +299,8 @@ class PPO():
     def evaluate_policy(self, 
                         nr_of_levels,
                         print_output=False,
-                        normalize_reward = True):
+                        normalize_reward = True,
+                        eval_dist_mode = 'easy'):
         """
         TODO: Add Video generation
         """
@@ -305,7 +308,7 @@ class PPO():
         policy = model.policy
 
         #pick levels we did not train on. 
-        eval_env = make_env(model.num_envs, start_level=model.num_levels, num_levels=nr_of_levels, normalize_reward=normalize_reward)
+        eval_env = make_env(model.num_envs, start_level=model.num_levels, num_levels=nr_of_levels, normalize_reward=normalize_reward, dist_mode = eval_dist_mode)
         obs = eval_env.reset()
 
         #book-keeping
