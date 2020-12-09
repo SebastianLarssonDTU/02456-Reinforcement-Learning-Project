@@ -2,5 +2,7 @@
 # Model used for videos
 
 impala death dp 5 : Experiment8_200levels_Run_06Dec_16h17m59s_loaded_08Dec_13h28m10s_8028160steps
+
 impala : Experiment7_200levels_Run_06Dec_16h18m31s_loaded_08Dec_14h21m55s_8019968steps
+
 ppo: Experiment2_200levels_Run_07Dec_13h49m13s_loaded_08Dec_17h00m43s_8126464steps
