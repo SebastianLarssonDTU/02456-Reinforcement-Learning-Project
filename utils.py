@@ -27,17 +27,19 @@ def make_env(
 	use_backgrounds=False,
 	normalize_obs=False,
 	normalize_reward=True,
-	seed=0
+	seed=0,
+	dist_mode = 'easy'
 	):
 	"""Make environment for procgen experiments"""
 	set_global_seeds(seed)
 	set_global_log_levels(40)
+	
 	env = ProcgenEnv(
 		num_envs=n_envs,
 		env_name=env_name,
 		start_level=start_level,
 		num_levels=num_levels,
-		distribution_mode='easy',
+		distribution_mode=dist_mode,
 		use_backgrounds=use_backgrounds,
 		restrict_themes=not use_backgrounds,
 		render_mode='rgb_array',
@@ -121,7 +123,9 @@ class Storage():
 			reward = self.reward
 		
 		return reward.mean(1).sum(0)
-
+	
+	def current_env(self):
+		yield self.obs, self.action, self.reward, self.done, self.log_prob, self.value, self.returns, self.advantage, self.info, self.step
 
 def orthogonal_init(module, gain=nn.init.calculate_gain('relu')):
 	"""Orthogonal weight initialization: https://arxiv.org/abs/1312.6120"""
