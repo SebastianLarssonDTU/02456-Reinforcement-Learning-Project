@@ -183,7 +183,7 @@ class PPO():
                     'optimizer_state_dict': self.optimizer.state_dict(),
                     }, model_path + file_name+'.pt')
 
-    def load_policy(self, file_name, model_path=MODEL_PATH):
+    def load_policy(self, file_name, model_path=MODEL_PATH, data_path=DATA_PATH):
         checkpoint = torch.load(model_path + file_name + '.pt')
         self.policy.load_state_dict(checkpoint["policy_state_dict"])
         self.policy.cuda()
@@ -198,7 +198,7 @@ class PPO():
             self.step_start = int(file_name.split("_")[-1].replace("steps", ""))
         #manually read last step from file
         else:
-            f = open(DATA_PATH + file_name +'.csv', "r")
+            f = open(data_path + file_name +'.csv', "r")
             for last_line in f:
                 pass
             f.close()
