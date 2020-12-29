@@ -175,16 +175,16 @@ class PPO():
                             self.file_name + '.txt')
         self.save_policy(self.file_name+"_{}steps".format(last_step))
 
-    def save_policy(self, file_name):
+    def save_policy(self, file_name, model_path = MODEL_PATH):
         if self.print_output:
             print("Saved current model in models folder with name {}.pt".format(file_name))
         torch.save({
                     'policy_state_dict': self.policy.state_dict(),
                     'optimizer_state_dict': self.optimizer.state_dict(),
-                    }, MODEL_PATH + file_name+'.pt')
+                    }, model_path + file_name+'.pt')
 
-    def load_policy(self, file_name):
-        checkpoint = torch.load(MODEL_PATH + file_name + '.pt')
+    def load_policy(self, file_name, model_path=MODEL_PATH):
+        checkpoint = torch.load(model_path + file_name + '.pt')
         self.policy.load_state_dict(checkpoint["policy_state_dict"])
         self.policy.cuda()
 
