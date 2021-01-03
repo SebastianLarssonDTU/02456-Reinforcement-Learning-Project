@@ -45,6 +45,7 @@ class PPO():
         self.step_start = 0
         self.dist_mode = dist_mode
         self.use_background = use_background
+        self.model_path=model_path
 
         #Create file_name
         self.file_name=self.create_file_name(file_name)
