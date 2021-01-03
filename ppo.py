@@ -19,7 +19,7 @@ class PPO():
                 eval_cycle=16,
                 save_interval = 1e6,
                 dist_mode = 'easy',
-                use_background = False):
+                use_background = False, model_path=MODEL_PATH):
         
         
         #Save parameters from hyperparameters module
@@ -175,7 +175,7 @@ class PPO():
                             self.file_name + '.txt')
         self.save_policy(self.file_name+"_{}steps".format(last_step))
 
-    def save_policy(self, file_name, model_path = MODEL_PATH):
+    def save_policy(self, file_name, model_path = self.model_path):
         if self.print_output:
             print("Saved current model in models folder with name {}.pt".format(file_name))
         torch.save({
