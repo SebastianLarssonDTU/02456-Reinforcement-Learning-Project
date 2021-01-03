@@ -16,23 +16,23 @@ MODEL_PATH = '/content/drive/My Drive/02456-Deep-Learning-Project/Models/'
 def mount_drive():
     drive.mount('/content/drive')
 
-def create_data_file(file_name):
-    f = open(DATA_PATH+file_name, "w")
+def create_data_file(file_name, data_path=DATA_PATH):
+    f = open(data_path+file_name, "w")
     f.close()
     return
 
 
-def add_to_data_file(string, file_name):
-    f = open(DATA_PATH + file_name, "a")
+def add_to_data_file(string, file_name, data_path=DATA_PATH):
+    f = open(data_path + file_name, "a")
     f.write(string)
     f.close()
     return
 
-def create_index_table_from_txt_files():
+def create_index_table_from_txt_files(data_path=DATA_PATH):
     """
         Creates a combined table of all the current runs available in the Google Drive 
     """
-    all_txt_files = glob.glob(DATA_PATH +'*.txt')
+    all_txt_files = glob.glob(data_path +'*.txt')
     final_df = pd.DataFrame()
     
     for file in all_txt_files:

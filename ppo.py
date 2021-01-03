@@ -92,10 +92,10 @@ class PPO():
             return self.version+'_Run_' + now.strftime("%d%b_%Hh%Mm%Ss")
 
     def init_log_files(self):
-        create_data_file(self.file_name + '.csv')
-        add_to_data_file("Step, Mean reward\n", self.file_name+'.csv')
-        create_data_file(self.file_name + '.txt')
-        add_to_data_file("Parameter name, Value\n", self.file_name+'.txt')
+        create_data_file(self.file_name + '.csv', data_path=self.data_path)
+        add_to_data_file("Step, Mean reward\n", self.file_name+'.csv', data_path=self.data_path)
+        create_data_file(self.file_name + '.txt', data_path=self.data_path)
+        add_to_data_file("Parameter name, Value\n", self.file_name+'.txt', data_path=self.data_path)
 
         if self.eval:
             create_data_file(self.file_name+'_EVAL' + '.csv')
