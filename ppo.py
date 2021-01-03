@@ -19,7 +19,7 @@ class PPO():
                 eval_cycle=16,
                 save_interval = 1e6,
                 dist_mode = 'easy',
-                use_background = False, model_path=MODEL_PATH):
+                use_background = False, model_path=MODEL_PATH, data_path=DATA_PATH):
         
         
         #Save parameters from hyperparameters module
@@ -46,6 +46,7 @@ class PPO():
         self.dist_mode = dist_mode
         self.use_background = use_background
         self.model_path=model_path
+        self.data_path = data_path
 
         #Create file_name
         self.file_name=self.create_file_name(file_name)
@@ -184,7 +185,7 @@ class PPO():
                     'optimizer_state_dict': self.optimizer.state_dict(),
                     }, model_path + file_name+'.pt')
 
-    def load_policy(self, file_name, model_path=MODEL_PATH, data_path=DATA_PATH):
+    def load_policy(self, file_name, model_path=MODEL_PATH, data_path=self.data_path):
         checkpoint = torch.load(model_path + file_name + '.pt')
         self.policy.load_state_dict(checkpoint["policy_state_dict"])
         self.policy.cuda()
