@@ -19,7 +19,7 @@ class PPO():
                 eval_cycle=16,
                 save_interval = 1e6,
                 dist_mode = 'easy',
-                use_background = False):
+                use_background = False, model_path=MODEL_PATH, data_path=DATA_PATH):
         
         
         #Save parameters from hyperparameters module
@@ -45,6 +45,8 @@ class PPO():
         self.step_start = 0
         self.dist_mode = dist_mode
         self.use_background = use_background
+        self.model_path = model_path
+        self.data_path = data_path
 
         #Create file_name
         self.file_name=self.create_file_name(file_name)
@@ -90,26 +92,26 @@ class PPO():
             return self.version+'_Run_' + now.strftime("%d%b_%Hh%Mm%Ss")
 
     def init_log_files(self):
-        create_data_file(self.file_name + '.csv')
-        add_to_data_file("Step, Mean reward\n", self.file_name+'.csv')
-        create_data_file(self.file_name + '.txt')
-        add_to_data_file("Parameter name, Value\n", self.file_name+'.txt')
+        create_data_file(self.file_name + '.csv', data_path=self.data_path)
+        add_to_data_file("Step, Mean reward\n", self.file_name+'.csv', data_path=self.data_path)
+        create_data_file(self.file_name + '.txt', data_path=self.data_path)
+        add_to_data_file("Parameter name, Value\n", self.file_name+'.txt', data_path=self.data_path)
 
         if self.eval:
-            create_data_file(self.file_name+'_EVAL' + '.csv')
+            create_data_file(self.file_name+'_EVAL' + '.csv', data_path=self.data_path)
             #add header
             header = "step,"
             for i in range(self.num_envs):
                 header += "env_{}(mean),env_{}(var),".format(i,i)
             header += "avg\n"
-            add_to_data_file(header, self.file_name+'_EVAL' + '.csv')
+            add_to_data_file(header, self.file_name+'_EVAL' + '.csv', data_path=self.data_path)
 
         hyperpar_string = ""
         for key, val in vars(self).items():
             if key in ["encoder", "print_output", "policy", "optimizer", "storage", "env"]:
                 continue
             hyperpar_string += "{}, {}\n".format(key, val)
-        add_to_data_file(hyperpar_string, self.file_name + '.txt')
+        add_to_data_file(hyperpar_string, self.file_name + '.txt', data_path=self.data_path)
         #TODO run through hyperparameters and log them
 #endregion
 #region training
@@ -150,15 +152,15 @@ class PPO():
             step += self.num_envs * self.num_steps
             if self.print_output:
                 print(f'Step: {step}\tMean reward: {self.storage.get_reward()}')
-            add_to_data_file("{}, {}\n".format(step, self.storage.get_reward()), self.file_name+'.csv')
+            add_to_data_file("{}, {}\n".format(step, self.storage.get_reward()), self.file_name+'.csv', data_path=self.data_path)
             if int((step/(self.num_envs * self.num_steps))%self.eval_cycle) == 0:
                 total_reward, all_episode_rewards = self.evaluate_policy(min(50,self.num_levels), eval_dist_mode = self.dist_mode, eval_use_background = self.use_background)
                 if self.print_output:
                     print("Evaluation done with avg score of {:10f}".format(total_reward))                
-                add_to_data_file("{},".format(step), self.file_name+'_EVAL' + '.csv')
+                add_to_data_file("{},".format(step), self.file_name+'_EVAL' + '.csv', data_path=self.data_path)
                 for key in sorted(all_episode_rewards.keys()):
-                    add_to_data_file("{:10f}, {:10f},".format(np.mean(all_episode_rewards[key]), np.var(all_episode_rewards[key])), self.file_name+'_EVAL' + '.csv')
-                add_to_data_file("{:10f}\n".format(total_reward), self.file_name+'_EVAL' + '.csv')
+                    add_to_data_file("{:10f}, {:10f},".format(np.mean(all_episode_rewards[key]), np.var(all_episode_rewards[key])), self.file_name+'_EVAL' + '.csv', data_path=self.data_path)
+                add_to_data_file("{:10f}\n".format(total_reward), self.file_name+'_EVAL' + '.csv', data_path=self.data_path)
         #end while loop
 
         if self.print_output:
@@ -172,19 +174,23 @@ class PPO():
         add_to_data_file('Time spent (in seconds), {:.2f}\n'.format(time.time()-self.start_time) + \
                             "Steps taken, {}\n".format(last_step) + \
                             "Done, False\n", 
-                            self.file_name + '.txt')
+                            self.file_name + '.txt', data_path=self.data_path)
         self.save_policy(self.file_name+"_{}steps".format(last_step))
 
-    def save_policy(self, file_name):
+    def save_policy(self, file_name, model_path = None):
+        if model_path is None:
+            model_path = self.model_path
         if self.print_output:
             print("Saved current model in models folder with name {}.pt".format(file_name))
         torch.save({
                     'policy_state_dict': self.policy.state_dict(),
                     'optimizer_state_dict': self.optimizer.state_dict(),
-                    }, MODEL_PATH + file_name+'.pt')
+                    }, model_path + file_name+'.pt')
 
-    def load_policy(self, file_name):
-        checkpoint = torch.load(MODEL_PATH + file_name + '.pt')
+    def load_policy(self, file_name, model_path=MODEL_PATH, data_path=None):
+        if data_path is None:
+            data_path = self.data_path
+        checkpoint = torch.load(model_path + file_name + '.pt')
         self.policy.load_state_dict(checkpoint["policy_state_dict"])
         self.policy.cuda()
 
@@ -198,7 +204,7 @@ class PPO():
             self.step_start = int(file_name.split("_")[-1].replace("steps", ""))
         #manually read last step from file
         else:
-            f = open(DATA_PATH + file_name +'.csv', "r")
+            f = open(data_path + file_name +'.csv', "r")
             for last_line in f:
                 pass
             f.close()
