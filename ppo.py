@@ -98,7 +98,7 @@ class PPO():
         add_to_data_file("Parameter name, Value\n", self.file_name+'.txt', data_path=self.data_path)
 
         if self.eval:
-            create_data_file(self.file_name+'_EVAL' + '.csv')
+            create_data_file(self.file_name+'_EVAL' + '.csv', data_path=self.data_path)
             #add header
             header = "step,"
             for i in range(self.num_envs):
