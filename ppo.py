@@ -45,7 +45,7 @@ class PPO():
         self.step_start = 0
         self.dist_mode = dist_mode
         self.use_background = use_background
-        self.model_path=model_path
+        self.model_path = model_path
         self.data_path = data_path
 
         #Create file_name
@@ -177,7 +177,9 @@ class PPO():
                             self.file_name + '.txt')
         self.save_policy(self.file_name+"_{}steps".format(last_step))
 
-    def save_policy(self, file_name, model_path = self.model_path):
+    def save_policy(self, file_name, model_path = None):
+        if model_path is None:
+            model_path = self.model_path
         if self.print_output:
             print("Saved current model in models folder with name {}.pt".format(file_name))
         torch.save({
@@ -185,7 +187,9 @@ class PPO():
                     'optimizer_state_dict': self.optimizer.state_dict(),
                     }, model_path + file_name+'.pt')
 
-    def load_policy(self, file_name, model_path=MODEL_PATH, data_path=self.data_path):
+    def load_policy(self, file_name, model_path=MODEL_PATH, data_path=None):
+        if data_path is None:
+            data_path = self.data_path
         checkpoint = torch.load(model_path + file_name + '.pt')
         self.policy.load_state_dict(checkpoint["policy_state_dict"])
         self.policy.cuda()
