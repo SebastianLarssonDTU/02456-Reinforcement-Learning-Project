@@ -104,14 +104,14 @@ class PPO():
             for i in range(self.num_envs):
                 header += "env_{}(mean),env_{}(var),".format(i,i)
             header += "avg\n"
-            add_to_data_file(header, self.file_name+'_EVAL' + '.csv')
+            add_to_data_file(header, self.file_name+'_EVAL' + '.csv', data_path=self.data_path)
 
         hyperpar_string = ""
         for key, val in vars(self).items():
             if key in ["encoder", "print_output", "policy", "optimizer", "storage", "env"]:
                 continue
             hyperpar_string += "{}, {}\n".format(key, val)
-        add_to_data_file(hyperpar_string, self.file_name + '.txt')
+        add_to_data_file(hyperpar_string, self.file_name + '.txt', data_path=self.data_path)
         #TODO run through hyperparameters and log them
 #endregion
 #region training
@@ -152,15 +152,15 @@ class PPO():
             step += self.num_envs * self.num_steps
             if self.print_output:
                 print(f'Step: {step}\tMean reward: {self.storage.get_reward()}')
-            add_to_data_file("{}, {}\n".format(step, self.storage.get_reward()), self.file_name+'.csv')
+            add_to_data_file("{}, {}\n".format(step, self.storage.get_reward()), self.file_name+'.csv', data_path=self.data_path)
             if int((step/(self.num_envs * self.num_steps))%self.eval_cycle) == 0:
                 total_reward, all_episode_rewards = self.evaluate_policy(min(50,self.num_levels), eval_dist_mode = self.dist_mode, eval_use_background = self.use_background)
                 if self.print_output:
                     print("Evaluation done with avg score of {:10f}".format(total_reward))                
-                add_to_data_file("{},".format(step), self.file_name+'_EVAL' + '.csv')
+                add_to_data_file("{},".format(step), self.file_name+'_EVAL' + '.csv', data_path=self.data_path)
                 for key in sorted(all_episode_rewards.keys()):
-                    add_to_data_file("{:10f}, {:10f},".format(np.mean(all_episode_rewards[key]), np.var(all_episode_rewards[key])), self.file_name+'_EVAL' + '.csv')
-                add_to_data_file("{:10f}\n".format(total_reward), self.file_name+'_EVAL' + '.csv')
+                    add_to_data_file("{:10f}, {:10f},".format(np.mean(all_episode_rewards[key]), np.var(all_episode_rewards[key])), self.file_name+'_EVAL' + '.csv', data_path=self.data_path)
+                add_to_data_file("{:10f}\n".format(total_reward), self.file_name+'_EVAL' + '.csv', data_path=self.data_path)
         #end while loop
 
         if self.print_output:
@@ -174,7 +174,7 @@ class PPO():
         add_to_data_file('Time spent (in seconds), {:.2f}\n'.format(time.time()-self.start_time) + \
                             "Steps taken, {}\n".format(last_step) + \
                             "Done, False\n", 
-                            self.file_name + '.txt')
+                            self.file_name + '.txt', data_path=self.data_path)
         self.save_policy(self.file_name+"_{}steps".format(last_step))
 
     def save_policy(self, file_name, model_path = None):
