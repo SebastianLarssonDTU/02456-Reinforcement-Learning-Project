@@ -1,7 +1,7 @@
 # 02456-Reinforcement-Learning-Project
 
 Most relevant files in this repository:
-* **Depp_Learning_Report.pdf[https://github.com/SebastianLarssonDTU/02456-Reinforcement-Learning-Project/blob/main/Depp_Learning_Report.pdf]** Final report
+* **[Depp_Learning_Report.pdf](https://github.com/SebastianLarssonDTU/02456-Reinforcement-Learning-Project/blob/main/Depp_Learning_Report.pdf)** Final report
 * **Final_Notebook.ipynb** Has example code to start training, loads pre-trained models and runs simple evaluation of selected models.
 * **Depp_Learning_Poster.pdf** Poster used in poster-session.
 * **Impala_without_death_penalty_reward_10.mp4** and **Impala_with_death_penalty_5_reward_62.mp4** in Videos folder. Video examples that illustrate the behavioural differences highlighted in the report. 
